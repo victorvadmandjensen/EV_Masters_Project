@@ -1,3 +1,5 @@
+import energy_decision
+
 class CoDI2:
     def __init__(self):
         self.energy_amount = 0
@@ -10,5 +12,8 @@ class CoDI2:
     def distribute_energy(self):
         self.energy_amount = self.energy_amount - self.energy_required
         return self.energy_amount
+
+    def determine_energy_decision():
+        
 
 codi2 = CoDI2()
