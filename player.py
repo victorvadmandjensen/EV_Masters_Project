@@ -4,12 +4,12 @@ class Player:
         self.tokens = 0
 
     def enter_tokens_spent(self):
-        to_actions = input('Spend tokens on action cards or player actions: ')
+        to_actions = input('Spend tokens on action cards or player actions for the ' + self.role + ' player: ')
         #print('I spent ' + to_actions + ' tokens!')
         return to_actions
     
     def enter_tokens_battery(self):
-        to_battery = input('Send tokens to battery: ')
+        to_battery = input('Send tokens to battery for the ' + self.role + ' player: ')
         #print('I sent ' + to_battery + ' tokens!')
         return to_battery
 

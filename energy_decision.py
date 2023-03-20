@@ -23,3 +23,5 @@ equilibrium = Energy_Decision(0, 0, 'This is an equilibirum!', 0)
 mild_deficit = Energy_Decision(-3, -1, 'This is a mild deficit!', 0)
 moderate_deficit = Energy_Decision(-8, -4, 'This is a moderate deficit!', 0)
 severe_deficit = Energy_Decision(-100, -9, 'This is a servere deficit!', 0)
+
+energy_decision_list = [severe_excess, moderate_excess, mild_excess, equilibrium, mild_deficit, moderate_deficit, severe_deficit]
