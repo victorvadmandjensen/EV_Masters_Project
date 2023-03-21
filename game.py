@@ -32,17 +32,21 @@ class Game:
         print(self.current_event.flavor_text)
         self.total_to_battery = 0
         for player in self.current_players:
-            player.enter_tokens_spent()
-            self.total_to_battery = self.total_to_battery + int(player.enter_tokens_battery())
-            player.update_tokens()
-
+            tokens_spent_current_player = player.enter_tokens_spent()
+            tokens_battery_current_player = player.enter_tokens_battery()
+            self.total_to_battery = self.total_to_battery + tokens_battery_current_player
+            player.update_tokens(tokens_spent_current_player, tokens_battery_current_player)
 
     def randomize_event(self):
-        event_index = random.randint(0, len(event.event_list))
+        event_index = random.randint(0, len(event.event_list)-1)
         return event.event_list[event_index]
 
     def end_round(self):
-        codi2.determine_energy_amount(self.total_to_battery, self.current_event.event_effect, self.current_season.season_effect)
-        codi2.distribute_energy()
-        print(codi2.determine_energy_decision().flavor_text)
+        self.codi2.determine_energy_amount(self.total_to_battery, self.current_event.event_effect, self.current_season.season_effect)
+        print(self.codi2.distribute_energy() )
+        if self.codi2.energy_amount > 0 and self.current_round == 2:
+            print(self.codi2.determine_energy_decision().flavor_text)
+            print(self.codi2.sell_energy())
+        elif self.codi2.energy_amount <= 0:
+            print(self.codi2.determine_energy_decision().flavor_text)
 

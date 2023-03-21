@@ -5,11 +5,6 @@ class Energy_Decision:
         self.flavor_text = flavor_text
         self.tokens_consequence = tokens_consequence
 
-    def enter_tokens_spent(self):
-        to_actions = input('Spend tokens on action cards or player actions: ')
-        #print('I spent ' + to_actions + ' tokens!')
-        return to_actions
-
 # excess
 
 severe_excess = Energy_Decision(21, 100, 'This is a severe excess!', 0)
