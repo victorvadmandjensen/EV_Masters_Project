@@ -63,15 +63,16 @@ class Game:
 
     def town_hall_meeting(self):
         print("Now the season is over! You should now discuss how you think it went, and what life in this energy community looked like.")
-        time.sleep(30)
+        time.sleep(4)
         print("You can now vote for a community upgrade.")
         for i in town_hall_upgrades.town_hall_upgrades_list:
             print("Option " + str(i.ID) + ": " + i.name + ". " + i.flavor_text )
         upgrade_votes = []
         for j in self.current_players:
             chosen_upgrade = input("Type the ID of the option the " + j.role + " player wants to vote for: ")
-            upgrade_votes.append(chosen_upgrade)
+            upgrade_votes.append(int(chosen_upgrade) )
         for k in town_hall_upgrades.town_hall_upgrades_list:
+            #print(upgrade_votes.count(k.ID))
             if upgrade_votes.count(k.ID) >= 3:
                 print("Option " + str(k.ID) + " won!")
                 for player in self.current_players:
