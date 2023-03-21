@@ -1,7 +1,8 @@
 class Player:
-    def __init__(self, role):
+    def __init__(self, role, base_tokens):
         self.role = role
         self.tokens = 0
+        self.base_tokens = base_tokens
 
     def enter_tokens_spent(self):
         to_actions = int(input('Spend tokens on action cards or player actions for the ' + self.role + ' player: ') )
@@ -17,10 +18,13 @@ class Player:
         self.tokens = self.tokens - tokens_spent - tokens_battery
         #print('Total: ' + str(self.tokens))
 
+    def receive_tokens(self):
+        self.tokens = self.tokens + self.base_tokens
+
 # define player objects
-red = Player('Red')
-green = Player('Green')
-blue = Player('Blue')
-yellow = Player('Yellow')
+red = Player('Red', 6)
+green = Player('Green', 7)
+blue = Player('Blue', 6)
+yellow = Player('Yellow', 7)
 
 player_list = [red, green, blue, yellow]

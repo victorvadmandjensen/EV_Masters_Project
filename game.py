@@ -1,4 +1,4 @@
-import codi2, energy_decision, event, player, season, random
+import codi2, energy_decision, event, player, season, random, time, town_hall_upgrades
 
 class Game:
     def __init__(self):
@@ -20,6 +20,7 @@ class Game:
             for j in range(0, self.max_rounds):
                 self.set_round(j)
                 self.end_round()
+            self.town_hall_meeting()
         print(self.outro)
 
     def set_season(self, index):
@@ -31,11 +32,18 @@ class Game:
         self.current_event = self.randomize_event()
         print(self.current_event.flavor_text)
         self.total_to_battery = 0
+        self.player_data_entry()
+    
+    def player_data_entry(self):
         for player in self.current_players:
+            player.receive_tokens()
+            print("The " + player.role + " player receives: " + str(player.base_tokens) + ". Your total is now: " + str(player.tokens) )
             tokens_spent_current_player = player.enter_tokens_spent()
+            # print("Your total is now: " + str(player.tokens) )
             tokens_battery_current_player = player.enter_tokens_battery()
             self.total_to_battery = self.total_to_battery + tokens_battery_current_player
             player.update_tokens(tokens_spent_current_player, tokens_battery_current_player)
+            print("Your total is now: " + str(player.tokens) )
 
     def randomize_event(self):
         event_index = random.randint(0, len(event.event_list)-1)
@@ -44,9 +52,31 @@ class Game:
     def end_round(self):
         self.codi2.determine_energy_amount(self.total_to_battery, self.current_event.event_effect, self.current_season.season_effect)
         print(self.codi2.distribute_energy() )
+        energy_decision = self.codi2.determine_energy_decision()
         if self.codi2.energy_amount > 0 and self.current_round == 2:
-            print(self.codi2.determine_energy_decision().flavor_text)
+            print(energy_decision.flavor_text)
             print(self.codi2.sell_energy())
+            for player in self.current_players:
+                player.tokens = player.tokens + energy_decision.tokens_consequence
         elif self.codi2.energy_amount <= 0:
-            print(self.codi2.determine_energy_decision().flavor_text)
+            print(energy_decision.flavor_text)
 
+    def town_hall_meeting(self):
+        print("Now the season is over! You should now discuss how you think it went, and what life in this energy community looked like.")
+        time.sleep(30)
+        print("You can now vote for a community upgrade.")
+        for i in town_hall_upgrades.town_hall_upgrades_list:
+            print("Option " + i.ID + ": " + i.name + ". " + i.flavor_text )
+        upgrade_votes = []
+        for j in self.current_players:
+            chosen_upgrade = input("Type the ID of the option you want to vote for: ")
+            upgrade_votes.append(chosen_upgrade)
+        for k in town_hall_upgrades.town_hall_upgrades_list:
+            if upgrade_votes.count(k.ID) >= 3:
+                print("Option " + k.ID + " won!")
+                for player in self.current_players:
+                    player.base_tokens = player.base_tokens + k.token_effect
+                self.codi2.energy_from_actors = self.codi2.energy_from_actors + k.energy_effect
+                break
+            else:
+                print("There was no majority, and you get no upgrades.")
