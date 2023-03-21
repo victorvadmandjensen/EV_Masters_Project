@@ -13,22 +13,31 @@ class Game:
         self.codi2 = codi2.CoDI2()
         self.max_rounds = 3
         self.wb = Workbook()
+        self.counter = 1
 
     
     def run_game(self):
         ws = self.wb.active
         ws.title = "Energy sent to the battery per round"
         ws.cell(column=1, row=1).value="Season"
+        ws.cell(column=2, row=1).value="Round"
+        ws.cell(column=3, row=1).value="Total energy sent by players to battery"
         print(self.intro)
         for i in range(0, len(season.season_list)):
             self.set_season(i)
             ws.cell(column=1, row=i+2).value = self.current_season.name
-            self.wb.save(filename = "energy_per_round.xlsx")
             for j in range(0, self.max_rounds):
                 self.set_round(j)
+                # we increment the counter which just keeps global track of every round
+                self.counter = self.counter+1
+                # we insert the counter and current total_to_battery sent players at the counter-placement as row in Excel
+                ws.cell(column=2,row=self.counter).value = self.counter-1
+                ws.cell(column=3,row=self.counter).value = self.total_to_battery
                 self.end_round()
             self.town_hall_meeting()
+        self.wb.save(filename = "energy_per_round.xlsx")    
         print(self.outro)
+        
 
     def set_season(self, index):
         self.current_season = season.season_list[index]
