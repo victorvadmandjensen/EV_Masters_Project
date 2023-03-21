@@ -8,7 +8,7 @@ class Energy_Decision:
 # excess
 
 severe_excess = Energy_Decision(21, 100, 'This is a severe excess!', 0)
-moderate_excess = Energy_Decision(11, 20, 'This is a moderate excess!', 5)
+moderate_excess = Energy_Decision(11, 20, 'This is a moderate excess! Everybody receives some tokens.', 5)
 mild_excess = Energy_Decision(1, 10, 'This is a mild excess!', 0)
 
 # equilibrium
