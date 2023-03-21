@@ -16,3 +16,11 @@ class Player:
     def update_tokens(self):        
         self.tokens = self.tokens - int(self.enter_tokens_spent()) - int(self.enter_tokens_battery())
         #print('Total: ' + str(self.tokens))
+
+# define player objects
+red = Player('Red')
+green = Player('Green')
+blue = Player('Blue')
+yellow = Player('Yellow')
+
+player_list = [red, green, blue, yellow]
