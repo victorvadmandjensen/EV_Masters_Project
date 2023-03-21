@@ -25,7 +25,7 @@ class Game:
 
     def set_season(self, index):
         self.current_season = season.season_list[index]
-        print(self.current_season.name)
+        print(self.current_season.name + "\n")
 
     def set_round(self, index):
         self.current_round = index
@@ -43,7 +43,7 @@ class Game:
             tokens_battery_current_player = player.enter_tokens_battery()
             self.total_to_battery = self.total_to_battery + tokens_battery_current_player
             player.update_tokens(tokens_spent_current_player, tokens_battery_current_player)
-            print("Your total is now: " + str(player.tokens) )
+            print("Your total is now: " + str(player.tokens) + "\n")
 
     def randomize_event(self):
         event_index = random.randint(0, len(event.event_list)-1)
@@ -66,17 +66,17 @@ class Game:
         time.sleep(30)
         print("You can now vote for a community upgrade.")
         for i in town_hall_upgrades.town_hall_upgrades_list:
-            print("Option " + i.ID + ": " + i.name + ". " + i.flavor_text )
+            print("Option " + str(i.ID) + ": " + i.name + ". " + i.flavor_text )
         upgrade_votes = []
         for j in self.current_players:
-            chosen_upgrade = input("Type the ID of the option you want to vote for: ")
+            chosen_upgrade = input("Type the ID of the option the " + j.role + " player wants to vote for: ")
             upgrade_votes.append(chosen_upgrade)
         for k in town_hall_upgrades.town_hall_upgrades_list:
             if upgrade_votes.count(k.ID) >= 3:
-                print("Option " + k.ID + " won!")
+                print("Option " + str(k.ID) + " won!")
                 for player in self.current_players:
                     player.base_tokens = player.base_tokens + k.token_effect
                 self.codi2.energy_from_actors = self.codi2.energy_from_actors + k.energy_effect
                 break
-            else:
-                print("There was no majority, and you get no upgrades.")
+        else:
+            print("There was no majority, and you get no upgrades.")
