@@ -5,6 +5,8 @@ class Event:
         self.event_effect = event_effect
         self.season = season
 
+    def getEventText(self):
+        return self.flavor_text
 
 event_blizzard = Event('Bilzzard in spring!', 'There has been an unexpected blizzard in the energy community! The community now needs 4 more energy units stored in the community battery at the end of this round.', -4, 'Spring')
 event_allergy = Event('Allergy in the community!', 'There has been an allergy outbreak in the energy community! The hospital requires 5 more energy units stored in the community battery at the end of this round.', -5, 'Spring')
