@@ -1,5 +1,4 @@
-import codi2, energy_decision, event, player, season, random, time, town_hall_upgrades, data_collection_module
-from openpyxl import Workbook # https://openpyxl.readthedocs.io/en/stable/
+import codi2, energy_decision, event, player, season, time, town_hall_upgrades, data_collection_module
 
 class Game:
     def __init__(self):
@@ -12,20 +11,20 @@ class Game:
         self.total_to_battery = 0
         self.codi2 = codi2.CoDI2()
         self.max_rounds = 3
-        #self.wb = Workbook()
 
     
     def run_game(self):
-       # ws = self.wb.active
-       # ws.title = "Energy sent to the battery per round"
-       # ws.cell(column=1, row=1).value="Season"
         print(self.intro)
+        data_module = data_collection_module.Data_Collection_Module()
+        data_module.initialize_workbook()
         for i in range(0, len(season.season_list)):
+            # remember to move this outside to the start of the game when we have more events
+            event.Event.reset_events(event.event_list)
             self.set_season(i)
-        #    ws.cell(column=1, row=i+2).value = self.current_season.name
-         #   self.wb.save(filename = "energy_per_round.xlsx")
             for j in range(0, self.max_rounds):
                 self.set_round(j)
+                data_module.add_energy_sent_to_battery(self.total_to_battery)
+                data_module.add_event(self.current_event)
                 self.end_round()
             self.town_hall_meeting()
         print(self.outro)
@@ -36,7 +35,7 @@ class Game:
 
     def set_round(self, index):
         self.current_round = index
-        self.current_event = self.randomize_event()
+        self.current_event = event.Event.randomize_event(event.event_list,self.current_season)
         print(self.current_event.getEventText())
         self.total_to_battery = 0
         self.player_data_entry()
@@ -52,9 +51,7 @@ class Game:
             player.update_tokens(tokens_spent_current_player, tokens_battery_current_player)
             print("Your total is now: " + str(player.tokens) + "\n")
 
-    def randomize_event(self):
-        event_index = random.randint(0, len(event.event_list)-1)
-        return event.event_list[event_index]
+
 
     def end_round(self):
         self.codi2.determine_energy_amount(self.total_to_battery, self.current_event.event_effect, self.current_season.season_effect)
