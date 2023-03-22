@@ -27,4 +27,4 @@ green = Player('green', 7)
 blue = Player('blue', 6)
 yellow = Player('yellow', 7)
 
-player_list = [red, green, blue, yellow]
+player_list = [yellow, red, blue, green]
