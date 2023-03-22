@@ -1,4 +1,4 @@
-import codi2, energy_decision, event, player, season, random, time, town_hall_upgrades
+import codi2, energy_decision, event, player, season, random, time, town_hall_upgrades, data_collection_module
 from openpyxl import Workbook # https://openpyxl.readthedocs.io/en/stable/
 
 class Game:
