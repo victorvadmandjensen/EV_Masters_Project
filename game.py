@@ -6,8 +6,8 @@ class Game:
         self.current_round = None
         self.current_season = None
         self.current_event = None
-        self.intro = 'Intro text here'
-        self.outro = 'Outro text here'
+        self.intro = 'Welcome to our energy community! We recently started and have just gotten everything set up. Now, it is your turn to be a part of the community and helps us reach a sustainable future. We have 1 year to prove to those around us that we can thrive as both a community and individuals. \n'
+        self.outro = 'Thank you for working with our energy community! We enjoyed having you all, and hope you can help other energy communities thrive. \n'
         self.current_players = player.player_list
         self.total_to_battery = 0
         self.codi2 = codi2.CoDI2()
