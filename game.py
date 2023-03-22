@@ -12,18 +12,18 @@ class Game:
         self.total_to_battery = 0
         self.codi2 = codi2.CoDI2()
         self.max_rounds = 3
-        self.wb = Workbook()
+        #self.wb = Workbook()
 
     
     def run_game(self):
-        ws = self.wb.active
-        ws.title = "Energy sent to the battery per round"
-        ws.cell(column=1, row=1).value="Season"
+       # ws = self.wb.active
+       # ws.title = "Energy sent to the battery per round"
+       # ws.cell(column=1, row=1).value="Season"
         print(self.intro)
         for i in range(0, len(season.season_list)):
             self.set_season(i)
-            ws.cell(column=1, row=i+2).value = self.current_season.name
-            self.wb.save(filename = "energy_per_round.xlsx")
+        #    ws.cell(column=1, row=i+2).value = self.current_season.name
+         #   self.wb.save(filename = "energy_per_round.xlsx")
             for j in range(0, self.max_rounds):
                 self.set_round(j)
                 self.end_round()
@@ -32,12 +32,12 @@ class Game:
 
     def set_season(self, index):
         self.current_season = season.season_list[index]
-        print(self.current_season.name + "\n")
+        print(self.current_season.getSeasonText() + "\n")
 
     def set_round(self, index):
         self.current_round = index
         self.current_event = self.randomize_event()
-        print(self.current_event.flavor_text)
+        print(self.current_event.getEventText())
         self.total_to_battery = 0
         self.player_data_entry()
     
