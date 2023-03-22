@@ -67,7 +67,7 @@ class Game:
 
     def town_hall_meeting(self):
         print("Now the season is over! You should now discuss how you think it went, and what life in this energy community looked like.")
-        time.sleep(4)
+        time.sleep(60)
         print("You can now vote for a community upgrade.")
         for i in town_hall_upgrades.town_hall_upgrades_list:
             print("Option " + str(i.ID) + ": " + i.name + ". " + i.flavor_text )
