@@ -1,9 +1,10 @@
-import codi2, energy_decision, event, player, season, time, town_hall_upgrades, data_collection_module
+import classes.codi2 as codi2, classes.energy_decision as energy_decision, classes.event as event, classes.player as player, classes.season as season, time, classes.town_hall_upgrades as town_hall_upgrades, classes.data_collection_module as data_collection_module
 
 class Game:
     def __init__(self):
         self.current_round = None
-        self.current_season = None
+        # current_season is an index for the season_list
+        self.current_season = 0
         self.current_event = None
         self.intro = 'Welcome to our energy community! We recently started and have just gotten everything set up. Now, it is your turn to be a part of the community and helps us reach a sustainable future. We have 1 year to prove to those around us that we can thrive as both a community and individuals. \n'
         self.outro = 'Thank you for working with our energy community! We enjoyed having you all, and hope you can help other energy communities thrive. \n'
@@ -28,10 +29,21 @@ class Game:
                 self.end_round()
             self.town_hall_meeting()
         print(self.outro)
+    
+    # update total to battery with argument given
+    def receive_tokens_battery(self, tokens_received):
+        self.total_to_battery = self.total_to_battery + tokens_received
 
-    def set_season(self, index):
-        self.current_season = season.season_list[index]
-        print(self.current_season.getSeasonText() + "\n")
+    # function to choose the season from the season_list based on a given int as index
+    def set_season(self, season_counter):
+        season_to_show = season.season_list[season_counter]
+        # if season is index 3 AKA winter we just return without incrementing
+        if season_counter >= 3:
+            return season_to_show
+        self.current_season = self.current_season + 1 
+        return season_to_show
+
+        game.set_season(game.current_season)
 
     def set_round(self, index):
         self.current_round = index
