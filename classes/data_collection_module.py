@@ -1,5 +1,5 @@
 from openpyxl import Workbook
-import event
+import classes.event as event
 
 class Data_Collection_Module:
     def __init__(self):

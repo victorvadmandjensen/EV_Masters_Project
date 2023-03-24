@@ -1,4 +1,4 @@
-import energy_decision
+import classes.energy_decision as energy_decision
 
 class CoDI2:
     def __init__(self):
