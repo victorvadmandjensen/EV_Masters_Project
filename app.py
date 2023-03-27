@@ -84,6 +84,7 @@ def red_player():
         red_player_object.update_tokens(tokens_for_action_cards,tokens_for_battery)
     return render_template("player.html", form=form, player_object = red_player_object)
 
+
 # route for the blue player
 @app.route("/blue", methods=["GET", "POST"])
 def blue_player():
