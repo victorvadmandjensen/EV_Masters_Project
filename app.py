@@ -73,9 +73,12 @@ def upgrades():
 # route for the red player
 @app.route("/red", methods=["GET", "POST"])
 def red_player():
+    # set up form
+    form = NameForm()
+    # get red player based on index
     red_player_object = game.current_players[1]
     red_player_object.receive_tokens()
-    form = NameForm()
+    
     # if form is valid then send and update tokens
     if form.validate_on_submit():
         tokens_for_action_cards = form.tokens_action_cards.data
