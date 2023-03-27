@@ -38,6 +38,28 @@ def show_season():
     season = game.set_season(game.current_season)
     return render_template("season.html", season = season)
 
+# route to show an event and start a round
+@app.route("/event", methods=["GET", "POST"])
+def show_event():
+    event = game.start_round(game.current_round)
+    return render_template("event.html", event = event, current_round = game.current_round, season = game.current_season)
+
+# route to end a round show energy_decisions 
+@app.route("/energy_decision", methods=["GET", "POST"])
+def show_energy_decision():
+    energy_distribution_statement = game.end_round()
+    energy_decision = game.set_current_energy_decision()
+    return render_template("energy_decision.html", energy_distribution_statement = energy_distribution_statement, energy_decision = energy_decision)
+
+# route to show town hall meeting text
+@app.route("/town_hall_meeting", methods=["GET", "POST"])
+def town_hall_meeting():
+    return render_template("town_hall_meeting.html")
+
+# route to show upgrades and let the players vote
+@app.route("/upgrades", methods=["GET", "POST"])
+def upgrades():
+    return render_template("upgrades.html", upgrade_list = town_hall_upgrades.town_hall_upgrades_list)
 
 # route for the blue player
 @app.route("/blue", methods=["GET", "POST"])

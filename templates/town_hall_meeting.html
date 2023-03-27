@@ -1,0 +1,18 @@
+{% extends 'bootstrap/base.html' %}
+{% import "bootstrap/wtf.html" as wtf %} 
+
+{% block styles %}
+{{ super() }}
+	<style>
+		body { background: #e8f1f9; }
+	</style>
+{% endblock %}
+
+{% block title %}
+Town Hall Meeting
+{% endblock %}
+
+{% block content %}
+    <h1> Welcome to a town hall meeting! </h1>
+    <p>Now the season is over! You should now discuss how you think it went, and what life in this energy community looked like.</p>
+{% endblock %}
