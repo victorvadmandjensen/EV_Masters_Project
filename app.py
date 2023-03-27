@@ -82,8 +82,6 @@ def red_player():
         tokens_for_battery = form.tokens_battery.data
         game.receive_tokens_battery(tokens_for_battery)
         red_player_object.update_tokens(tokens_for_action_cards,tokens_for_battery)
-        #print(tokens_for_battery)
-        #print(game.total_to_battery)
     return render_template("player.html", form=form, player_object = red_player_object)
 
 # route for the blue player
