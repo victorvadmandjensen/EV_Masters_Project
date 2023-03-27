@@ -7,9 +7,9 @@ class Energy_Decision:
 
 # excess
 
-severe_excess = Energy_Decision(21, 100, 'This is a severe excess! You lose 1 environmental point on the community meter, because we have to the battery in good shape without it being overloaded. \n', 0)
+severe_excess = Energy_Decision(21, 100, 'This is a severe excess! This means we sell the energ, but you also lose 1 environmental point on the community meter, because we have to keep the battery in good shape without it being overloaded. \n', 0)
 moderate_excess = Energy_Decision(11, 20, 'This is a moderate excess! This means we sell the energy and get some returns. Everybody receives 5 tokens, and you get the following points on the community meter: 1 morale, 1 environmental, and 2 economic. \n', 5)
-mild_excess = Energy_Decision(1, 10, 'This is a mild excess! This means we sell energy, but not enough to get any returns. You get the folloing points on the community meter: 1 economic, and 1 morale. \n', 0)
+mild_excess = Energy_Decision(1, 10, 'This is a mild excess! This means we sell the energy, but not enough to get any returns. You get the folloing points on the community meter: 1 economic, and 1 morale. \n', 0)
 
 # equilibrium
 equilibrium = Energy_Decision(0, 0, 'This is an equilibirum! You get neither tokens nor community meter points this time. \n', 0)

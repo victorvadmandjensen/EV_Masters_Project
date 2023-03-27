@@ -4,15 +4,16 @@
 {% block styles %}
 {{ super() }}
 	<style>
-		body { background: #dcdfe3; }
+		body { background: #e8f1f9; }
 	</style>
 {% endblock %}
 
 {% block title %}
-{{ season.name }}
+{{ event.name }}
 {% endblock %}
 
 {% block content %}
-    <h1> {{ season.name }} </h1>
-    <p>{{ season.flavor_text }}</p>
+    <h2> This is round {{ current_round }} in season {{ season }} </h2>
+    <h1> {{ event.name }} </h1>
+    <p>{{ event.flavor_text }}</p>
 {% endblock %}

@@ -1,0 +1,27 @@
+{% extends 'bootstrap/base.html' %}
+{% import "bootstrap/wtf.html" as wtf %} 
+
+{% block styles %}
+{{ super() }}
+	<style>
+		body { background: #e8f1f9; }
+	</style>
+{% endblock %}
+
+{% block title %}
+Town Hall Meeting - Upgrades
+{% endblock %}
+
+{% block content %}
+    <h1> You can choose from the following upgrades: </h1>
+    <p>
+    <form action="/upgrades" method="post" id="choose_upgrade">
+        {% for upgrade in upgrade_list %}
+            <input type="radio" name="radio_choice" value={{upgrade.ID}} id={{upgrade.ID}}>
+            <label for={{upgrade}}>Option {{ upgrade.ID }}:  {{ upgrade.name }}. {{ upgrade.flavor_text }} </label><br><br>
+            <br>
+        {% endfor %}
+    <input type="submit" value="Vote!">
+    </form>
+    </p>
+{% endblock %}
