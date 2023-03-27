@@ -2,7 +2,7 @@ from flask import Flask, render_template, redirect, url_for, request
 from flask_bootstrap import Bootstrap
 from flask_wtf import FlaskForm
 # below we only important strings, integers and submissions from wtforms, and we have to import more options
-from wtforms import StringField, SubmitField, IntegerField
+from wtforms import StringField, SubmitField, IntegerField, ValidationError
 from wtforms.validators import DataRequired, NumberRange
 
 import classes.game as game, classes.codi2 as codi2, classes.energy_decision as energy_decision, classes.event as event, classes.player as player, classes.season as season, time, classes.town_hall_upgrades as town_hall_upgrades, classes.data_collection_module as data_collection_module
@@ -23,6 +23,14 @@ class NameForm(FlaskForm):
     tokens_action_cards = IntegerField('How many tokens have you spent on action cards and/or player actions?', validators=[NumberRange(min=0,max=20, message=""), DataRequired()])
     tokens_battery = IntegerField('How many tokens will you send to the battery?', validators=[NumberRange(min=0,max=20, message=""), DataRequired()])
     submit = SubmitField('Submit')
+
+    # custom validation method - right now it does not quite work, because it for some reason does not let the player lose tokens
+    def check_for_token_validation(form, max_tokens):
+        if (int(form.tokens_action_cards.data) + int(form.tokens_battery.data)) > max_tokens:
+            #print(form.tokens_action_cards.data + form.tokens_battery.data)
+            raise ValidationError(message="FUCK OFF")
+        else:
+            return True
 
 # initialize game object
 game = game.Game()
@@ -96,12 +104,16 @@ def blue_player():
     # get blue player based on index
     blue_player_object = game.current_players[2]
     blue_player_object.receive_tokens()
-    if form.validate_on_submit():
+    if form.validate_on_submit() and form.check_for_token_validation(blue_player_object.tokens):
+    # if the form validates sucessfully then get the data from the form and use it to update game and player states
+    #if form.validate_on_submit():
         tokens_for_action_cards = form.tokens_action_cards.data
         tokens_for_battery = form.tokens_battery.data
         game.receive_tokens_battery(tokens_for_battery)
-        blue_player_object.update_tokens(tokens_for_action_cards,tokens_for_battery)
-        #print(tokens_for_battery)
-        #print(game.total_to_battery)
+        blue_player_object.update_tokens(tokens_for_action_cards, tokens_for_battery)
+    # debugging print statement to check the players tokens - remember it needs to be down here to get token state AFTER distribution
+    print(blue_player_object.tokens)
     return render_template("player.html", form=form, player_object = blue_player_object)
 
+    # the trouble above is that if the if-statement never evaluates to true, then the method just prints
+    # tokens and renders the template - when it does this the player receives tokens anew! this is a problem
