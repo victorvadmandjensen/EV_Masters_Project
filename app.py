@@ -1,9 +1,9 @@
-from flask import Flask, render_template, redirect, url_for
+from flask import Flask, render_template, redirect, url_for, request
 from flask_bootstrap import Bootstrap
 from flask_wtf import FlaskForm
 # below we only important strings, integers and submissions from wtforms, and we have to import more options
 from wtforms import StringField, SubmitField, IntegerField
-from wtforms.validators import DataRequired
+from wtforms.validators import DataRequired, NumberRange
 
 import classes.game as game, classes.codi2 as codi2, classes.energy_decision as energy_decision, classes.event as event, classes.player as player, classes.season as season, time, classes.town_hall_upgrades as town_hall_upgrades, classes.data_collection_module as data_collection_module
 
@@ -18,10 +18,10 @@ Bootstrap(app)
 # python -m flask --no-debug run --host=0.0.0.0
 
 # create form template for players
-# all IntegerFields have to be non-zero to be valid
+# all NumberRange fields have to be minimum zero to be valid
 class NameForm(FlaskForm):
-    tokens_action_cards = IntegerField('How many tokens have you spent on action cards?', validators=[DataRequired()])
-    tokens_battery = IntegerField('How many tokens will you send to the battery?', validators=[DataRequired()])
+    tokens_action_cards = IntegerField('How many tokens have you spent on action cards and/or player actions?', validators=[NumberRange(min=0,max=20, message="")])
+    tokens_battery = IntegerField('How many tokens will you send to the battery?', validators=[NumberRange(min=0,max=20, message="")])
     submit = SubmitField('Submit')
 
 # initialize game object
@@ -61,28 +61,36 @@ def town_hall_meeting():
 def upgrades():
     return render_template("upgrades.html", upgrade_list = town_hall_upgrades.town_hall_upgrades_list)
 
-# route for the blue player
-@app.route("/blue", methods=["GET", "POST"])
-def blue_player():
-    form = NameForm()
-    name_of_player = "blue"
-    if form.validate_on_submit():
-        tokens_for_action_cards = form.tokens_action_cards.data
-        tokens_for_battery = form.tokens_battery.data
-        game.receive_tokens_battery(tokens_for_battery)
-        #print(tokens_for_battery)
-        #print(game.total_to_battery)
-    return render_template("player.html", form=form, name_of_player=name_of_player)
-
 # route for the red player
 @app.route("/red", methods=["GET", "POST"])
 def red_player():
+    red_player_object = game.current_players[1]
+    red_player_object.receive_tokens()
     form = NameForm()
-    name_of_player = "red"
+    # if form is valid then send and update tokens
     if form.validate_on_submit():
         tokens_for_action_cards = form.tokens_action_cards.data
         tokens_for_battery = form.tokens_battery.data
         game.receive_tokens_battery(tokens_for_battery)
+        red_player_object.update_tokens(tokens_for_action_cards,tokens_for_battery)
         #print(tokens_for_battery)
         #print(game.total_to_battery)
-    return render_template("player.html", form=form, name_of_player=name_of_player)
+    return render_template("player.html", form=form, player_object = red_player_object)
+
+# route for the blue player
+@app.route("/blue", methods=["GET", "POST"])
+def blue_player():
+    # set up form
+    form = NameForm()
+    # get blue player based on index
+    blue_player_object = game.current_players[2]
+    blue_player_object.receive_tokens()
+    if form.validate_on_submit():
+        tokens_for_action_cards = form.tokens_action_cards.data
+        tokens_for_battery = form.tokens_battery.data
+        game.receive_tokens_battery(tokens_for_battery)
+        blue_player_object.update_tokens(tokens_for_action_cards,tokens_for_battery)
+        #print(tokens_for_battery)
+        #print(game.total_to_battery)
+    return render_template("player.html", form=form, player_object = blue_player_object)
+

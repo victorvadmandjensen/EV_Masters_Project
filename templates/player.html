@@ -13,6 +13,7 @@ Enter your tokens!
 {% endblock %}
 
 {% block content %}
-    <h1>You are player: {{name_of_player}}</h1>
+    <h1>You are the {{player_object.role}} player.</h1>
+	<h2>You have {{player_object.tokens}} tokens.</h2>
     {{wtf.quick_form(form)}}
 {% endblock %}
