@@ -20,8 +20,8 @@ Bootstrap(app)
 # create form template for players
 # all NumberRange fields have to be minimum zero to be valid
 class NameForm(FlaskForm):
-    tokens_action_cards = IntegerField('How many tokens have you spent on action cards and/or player actions?', validators=[NumberRange(min=0,max=20, message="")])
-    tokens_battery = IntegerField('How many tokens will you send to the battery?', validators=[NumberRange(min=0,max=20, message="")])
+    tokens_action_cards = IntegerField('How many tokens have you spent on action cards and/or player actions?', validators=[NumberRange(min=0,max=20, message=""), DataRequired()])
+    tokens_battery = IntegerField('How many tokens will you send to the battery?', validators=[NumberRange(min=0,max=20, message=""), DataRequired()])
     submit = SubmitField('Submit')
 
 # initialize game object
