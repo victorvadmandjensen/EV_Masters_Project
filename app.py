@@ -59,7 +59,16 @@ def town_hall_meeting():
 # route to show upgrades and let the players vote
 @app.route("/upgrades", methods=["GET", "POST"])
 def upgrades():
-    return render_template("upgrades.html", upgrade_list = town_hall_upgrades.town_hall_upgrades_list)
+    # if the user gets data then render the page
+    if request.method == "GET":
+        return render_template("upgrades.html", upgrade_list = town_hall_upgrades.town_hall_upgrades_list)
+    # else process form data
+    else:
+        # get value from the chosen radio button
+        chosen_upgrade = int(request.form.get("radio_choice") )
+        game.apply_upgrade(chosen_upgrade)
+        #return redirect(url_for("show_season"))
+
 
 # route for the red player
 @app.route("/red", methods=["GET", "POST"])

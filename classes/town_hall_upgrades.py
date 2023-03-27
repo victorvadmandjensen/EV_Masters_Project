@@ -7,7 +7,8 @@ class Town_Hall_Upgrades:
         self.token_effect = token_effect
     
 
-token_upgrade = Town_Hall_Upgrades(1, "Token upgrade", "Every player gets an extra token in every turn for the rest of the game.", 0, 1)
-energy_upgrade = Town_Hall_Upgrades(2, "Energy upgrade", "All public institutions and private companies produce 1 more energy each round, for a total of 4 energy units.", 4, 0)
+# creation of upgrades - IDs are zero-indexed
+token_upgrade = Town_Hall_Upgrades(0, "Token upgrade", "Every player gets an extra token in every turn for the rest of the game.", 0, 1)
+energy_upgrade = Town_Hall_Upgrades(1, "Energy upgrade", "All public institutions and private companies produce 1 more energy each round, for a total of 4 energy units.", 4, 0)
 
 town_hall_upgrades_list = [token_upgrade, energy_upgrade]

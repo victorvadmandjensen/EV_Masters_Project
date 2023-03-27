@@ -100,6 +100,14 @@ class Game:
         elif self.codi2.energy_amount >= 0 and self.current_round != 2:
             self.increment_round()
             return None
+        
+    # method to apply inputted upgrade to attributes    
+    def apply_upgrade(self, chosen_upgrade):
+        upgrade = town_hall_upgrades.town_hall_upgrades_list[chosen_upgrade]
+        for player in self.current_players:
+            player.base_tokens = player.base_tokens + upgrade.token_effect
+        self.codi2.energy_from_actors = self.codi2.energy_from_actors + upgrade.energy_effect
+        print(upgrade.flavor_text)
 
     def town_hall_meeting(self):
         print("Now the season is over! You should now discuss how you think it went, and what life in this energy community looked like.")
