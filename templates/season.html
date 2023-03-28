@@ -15,4 +15,12 @@
 {% block content %}
     <h1> {{ season.name }} </h1>
     <p>{{ season.flavor_text }}</p>
+
+	<button id="start_season" class="float-left submit-button" >Go to event</button>
+
+    <script type="text/javascript">
+    	document.getElementById("start_season").onclick = function () {
+        location.href = "/event";
+	  };
+    </script>
 {% endblock %}

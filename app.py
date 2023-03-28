@@ -48,8 +48,7 @@ def show_event():
 @app.route("/energy_decision", methods=["GET", "POST"])
 def show_energy_decision():
     energy_distribution_statement = game.end_round()
-    energy_decision = game.set_current_energy_decision()
-    return render_template("energy_decision.html", energy_distribution_statement = energy_distribution_statement, energy_decision = energy_decision)
+    return render_template("energy_decision.html", energy_distribution_statement = energy_distribution_statement, energy_decision = game.set_current_energy_decision())
 
 # route to show town hall meeting text
 @app.route("/town_hall_meeting", methods=["GET", "POST"])
@@ -67,7 +66,7 @@ def upgrades():
         # get value from the chosen radio button
         chosen_upgrade = int(request.form.get("radio_choice") )
         game.apply_upgrade(chosen_upgrade)
-        #return redirect(url_for("show_season"))
+        return redirect(url_for("show_season"))
 
 
 # route for the red player

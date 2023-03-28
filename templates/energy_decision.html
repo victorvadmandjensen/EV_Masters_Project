@@ -15,4 +15,21 @@ hello
 {% block content %}
     <h1> {{ energy_distribution_statement }} </h1>
     <p>{{ energy_decision.flavor_text }}</p>
+
+	<button id="next_event" class="float-left submit-button" >Next event</button>
+
+    <script type="text/javascript">
+    	document.getElementById("next_event").onclick = function () {
+        location.href = "/event";
+    };
+    </script>
+
+	<button id="start_thm" class="float-left submit-button" >It's time for a town hall meeting</button>
+
+	<script type="text/javascript">
+		document.getElementById("start_thm").onclick = function () {
+		location.href = "/town_hall_meeting";
+	};
+	</script>
+	
 {% endblock %}
