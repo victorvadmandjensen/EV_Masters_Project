@@ -106,11 +106,17 @@ def blue_player():
     blue_player_object = game.current_players[2]
     blue_player_object.receive_tokens()
     #if form.validate_on_submit() and form.check_for_token_validation(blue_player_object.tokens):
-
+    # set variables to be form data
+    tokens_for_action_cards = form.tokens_action_cards.data
+    tokens_for_battery = form.tokens_battery.data
+    token_sum = sum([tokens_for_action_cards, tokens_for_battery])
+    # check if form fields are true (i.e. filled out) and do something in this case - this means we just continue when they are not filled
+    if tokens_for_battery and tokens_for_action_cards:
+        print("hej")
+        #if token_sum > blue_player_object.tokens:
+            #print(f"Token sum is {token_sum} and players tokens is {blue_player_object.tokens}")
     # if the form validates sucessfully then get the data from the form and use it to update game and player states
     if form.validate_on_submit():
-        tokens_for_action_cards = form.tokens_action_cards.data
-        tokens_for_battery = form.tokens_battery.data
         game.receive_tokens_battery(tokens_for_battery)
         blue_player_object.update_tokens(tokens_for_action_cards, tokens_for_battery)
     # debugging print statement to check the players tokens - remember it needs to be down here to get token state AFTER distribution
