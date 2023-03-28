@@ -86,17 +86,26 @@ def red_player():
     form = NameForm()
     # get red player based on index
     red_player_object = game.current_players[1]
-    red_player_object.receive_tokens()
-    form.submit.pre_validate
-    # if form is valid then send and update tokens
-
+    # set tokens_spent as 0 by default
     tokens_spent = 0
+    # check if the form is valid
     if form.validate_on_submit():
         tokens_for_action_cards = form.tokens_action_cards.data
         tokens_for_battery = form.tokens_battery.data
+        print(f"Player has {red_player_object.tokens} tokens, and the sum is { sum( [tokens_for_action_cards, tokens_for_battery] ) }" )
+        # if the sum of tokens entered is larger than the player's tokens then raise a StopValidation error
+        if sum( [tokens_for_action_cards, tokens_for_battery] ) > red_player_object.tokens:
+            raise StopValidation(message="TURN BACK")
         tokens_spent = tokens_for_action_cards + tokens_for_battery
+        # provide game object tokens and update the player object's tokens
         game.receive_tokens_battery(tokens_for_battery)
-        red_player_object.update_tokens(tokens_for_action_cards,tokens_for_battery)
+        red_player_object.update_tokens(tokens_for_action_cards, tokens_for_battery)
+        # create a form object with formdata = None to clear the fields
+        form = NameForm(formdata = None)
+    # run the receive_tokens() method on the player object - we do that here because if it is above the form validation statement
+    # then the player would receive tokens BEFORE the form validation, meaning they would always have 7 more tokens than shown
+    red_player_object.receive_tokens()
+    # render the tame plate with arguments we want to display for the client
     return render_template("player.html", form=form, player_object = red_player_object, tokens_spent = tokens_spent)
 
 
@@ -105,53 +114,26 @@ def red_player():
 def blue_player():
     # set up form
     form = NameForm()
-    #form.tokens_action_cards.data = None
     # get blue player based on index
     blue_player_object = game.current_players[2]
-    #blue_player_object.receive_tokens()
-    #if form.validate_on_submit() and form.check_for_token_validation(blue_player_object.tokens):
-    # set variables to be form data
-    # check if form fields are true (i.e. filled out) and do something in this case - this means we just continue when they are not filled
-    #if tokens_for_battery and tokens_for_action_cards:
-     #   print("hej")
-        #if token_sum > blue_player_object.tokens:
-            #print(f"Token sum is {token_sum} and players tokens is {blue_player_object.tokens}")
-    # if the form validates sucessfully then get the data from the form and use it to update game and player states
-    #print(blue_player_object.tokens)
-
-    
-
+    # set tokens_spent to 0 as default
     tokens_spent = 0
+    # check if the form is valid
     if form.validate_on_submit():
         tokens_for_action_cards = form.tokens_action_cards.data
         tokens_for_battery = form.tokens_battery.data
-        #if tokens_for_action_cards + tokens_for_battery == 2:
-         #   raise ValidationError(message="nej")
-        # at this point, the system seems to receive tokens before it compares the two values
         print(f"Player has {blue_player_object.tokens} tokens, and the sum is { sum( [tokens_for_action_cards, tokens_for_battery] ) }" )
+        # if the sum of tokens entered is larger than the player's tokens then raise a StopValidation error
         if sum( [tokens_for_action_cards, tokens_for_battery] ) > blue_player_object.tokens:
-            raise StopValidation()
+            raise StopValidation(message="TURN BACK")
         tokens_spent = tokens_for_action_cards + tokens_for_battery
-        #token_sum = sum([tokens_for_action_cards, tokens_for_battery])
-        #print(token_sum)
-        # IS THE THING STUPID BECAUSE OF THIS PRINT LINES PLACEMENT?????
-        # Right now it prints something that is WRONG, as it seemingly prints after receiving tokens but before spending them
-        #print(blue_player_object.tokens)
-        # this works if either of the token fields are 10 when there are fewer tokens. But if you have 7 tokens you can spend 14??
-        #if token_sum > blue_player_object.tokens:
-        #    return render_template("server.html")
-        #else:
+        # provide game object tokens and update the player object's tokens
         game.receive_tokens_battery(tokens_for_battery)
         blue_player_object.update_tokens(tokens_for_action_cards, tokens_for_battery)
         # create a form object with formdata = None to clear the fields
         form = NameForm(formdata = None)
-            #return render_template("player.html", form=form, player_object = blue_player_object)
-    # debugging print statement to check the players tokens - remember it needs to be down here to get token state AFTER distribution
-    # print(blue_player_object.tokens)
-
+    # run the receive_tokens() method on the player object - we do that here because if it is above the form validation statement
+    # then the player would receive tokens BEFORE the form validation, meaning they would always have 7 more tokens than shown
     blue_player_object.receive_tokens()
     # render the tame plate with arguments we want to display for the client
     return render_template("player.html", form=form, player_object = blue_player_object, tokens_spent = tokens_spent)
-
-    # the trouble above is that if the if-statement never evaluates to true, then the method just prints
-    # tokens and renders the template - when it does this the player receives tokens anew! this is a problem
