@@ -1,12 +1,7 @@
 {% extends 'bootstrap/base.html' %}
 {% import "bootstrap/wtf.html" as wtf %} 
 
-{% block styles %}
-{{ super() }}
-	<style>
-		body { background: #dcdfe3; }
-	</style>
-{% endblock %}
+
 
 {% block title %}
 {{ season.name }}
@@ -14,5 +9,5 @@
 
 {% block content %}
     <h1> {{ season.name }} </h1>
-    <p>{{ season.flavor_text }}</p>
+    <h2>{{ season.flavor_text }}</h2>
 {% endblock %}

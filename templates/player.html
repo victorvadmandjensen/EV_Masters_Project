@@ -1,22 +1,18 @@
 {% extends 'bootstrap/base.html' %}
 {% import "bootstrap/wtf.html" as wtf %} 
 
-{% block styles %}
-{{ super() }}
-	<style>
-		body { background: #e8f1f9; }
-	</style>
-{% endblock %}
+
 
 {% block title %}
 Enter your tokens!
 {% endblock %}
 
 {% block content %}
-    <h1>You are the {{player_object.role}} player.</h1>
+	
+    <h1>You are the <span>{{player_object.role}}</span> player.</h1>
 	<h3>You spent {{tokens_spent}} tokens last round.</h3>
-	<h3>You received {{player_object.base_tokens}} from the CoDI-2 algorithm. </h3>
-	<h3>You have {{player_object.tokens}} tokens.</h3>
+	<h3>You received {{player_object.base_tokens}} from the CoDI-2 algorithm this round. </h3>
+	<h3>You have {{player_object.tokens}} tokens that you can spend!</h3>
     {{wtf.quick_form(form)}}
 	
-{% endblock %}
+{% endblock content%}

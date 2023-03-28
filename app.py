@@ -7,6 +7,7 @@ from wtforms.validators import InputRequired, NumberRange, StopValidation
 
 import classes.game as game, classes.codi2 as codi2, classes.energy_decision as energy_decision, classes.event as event, classes.player as player, classes.season as season, time, classes.town_hall_upgrades as town_hall_upgrades, classes.data_collection_module as data_collection_module
 
+# if we want to change the base Bootstrap template check venv/Lib\site-packages/flask_bootstrap/templates\boostrap to find it
 
 app = Flask(__name__)
 
