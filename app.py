@@ -3,7 +3,7 @@ from flask_bootstrap import Bootstrap
 from flask_wtf import FlaskForm
 # below we only important strings, integers and submissions from wtforms, and we have to import more options
 from wtforms import StringField, SubmitField, IntegerField, ValidationError
-from wtforms.validators import InputRequired, NumberRange
+from wtforms.validators import InputRequired, NumberRange, StopValidation
 
 import classes.game as game, classes.codi2 as codi2, classes.energy_decision as energy_decision, classes.event as event, classes.player as player, classes.season as season, time, classes.town_hall_upgrades as town_hall_upgrades, classes.data_collection_module as data_collection_module
 
@@ -87,14 +87,17 @@ def red_player():
     # get red player based on index
     red_player_object = game.current_players[1]
     red_player_object.receive_tokens()
-    
+    form.submit.pre_validate
     # if form is valid then send and update tokens
+
+    tokens_spent = 0
     if form.validate_on_submit():
         tokens_for_action_cards = form.tokens_action_cards.data
         tokens_for_battery = form.tokens_battery.data
+        tokens_spent = tokens_for_action_cards + tokens_for_battery
         game.receive_tokens_battery(tokens_for_battery)
         red_player_object.update_tokens(tokens_for_action_cards,tokens_for_battery)
-    return render_template("player.html", form=form, player_object = red_player_object)
+    return render_template("player.html", form=form, player_object = red_player_object, tokens_spent = tokens_spent)
 
 
 # route for the blue player
@@ -102,26 +105,53 @@ def red_player():
 def blue_player():
     # set up form
     form = NameForm()
+    #form.tokens_action_cards.data = None
     # get blue player based on index
     blue_player_object = game.current_players[2]
-    blue_player_object.receive_tokens()
+    #blue_player_object.receive_tokens()
     #if form.validate_on_submit() and form.check_for_token_validation(blue_player_object.tokens):
     # set variables to be form data
-    tokens_for_action_cards = form.tokens_action_cards.data
-    tokens_for_battery = form.tokens_battery.data
-    token_sum = sum([tokens_for_action_cards, tokens_for_battery])
     # check if form fields are true (i.e. filled out) and do something in this case - this means we just continue when they are not filled
-    if tokens_for_battery and tokens_for_action_cards:
-        print("hej")
+    #if tokens_for_battery and tokens_for_action_cards:
+     #   print("hej")
         #if token_sum > blue_player_object.tokens:
             #print(f"Token sum is {token_sum} and players tokens is {blue_player_object.tokens}")
     # if the form validates sucessfully then get the data from the form and use it to update game and player states
+    #print(blue_player_object.tokens)
+
+    
+
+    tokens_spent = 0
     if form.validate_on_submit():
+        tokens_for_action_cards = form.tokens_action_cards.data
+        tokens_for_battery = form.tokens_battery.data
+        #if tokens_for_action_cards + tokens_for_battery == 2:
+         #   raise ValidationError(message="nej")
+        # at this point, the system seems to receive tokens before it compares the two values
+        print(f"Player has {blue_player_object.tokens} tokens, and the sum is { sum( [tokens_for_action_cards, tokens_for_battery] ) }" )
+        if sum( [tokens_for_action_cards, tokens_for_battery] ) > blue_player_object.tokens:
+            raise StopValidation()
+        tokens_spent = tokens_for_action_cards + tokens_for_battery
+        #token_sum = sum([tokens_for_action_cards, tokens_for_battery])
+        #print(token_sum)
+        # IS THE THING STUPID BECAUSE OF THIS PRINT LINES PLACEMENT?????
+        # Right now it prints something that is WRONG, as it seemingly prints after receiving tokens but before spending them
+        #print(blue_player_object.tokens)
+        # this works if either of the token fields are 10 when there are fewer tokens. But if you have 7 tokens you can spend 14??
+        #if token_sum > blue_player_object.tokens:
+        #    return render_template("server.html")
+        #else:
         game.receive_tokens_battery(tokens_for_battery)
         blue_player_object.update_tokens(tokens_for_action_cards, tokens_for_battery)
+        # create a form object with formdata = None to clear the fields
+        form = NameForm(formdata = None)
+            #return render_template("player.html", form=form, player_object = blue_player_object)
     # debugging print statement to check the players tokens - remember it needs to be down here to get token state AFTER distribution
-    print(blue_player_object.tokens)
-    return render_template("player.html", form=form, player_object = blue_player_object)
+    # print(blue_player_object.tokens)
+
+    blue_player_object.receive_tokens()
+    # render the tame plate with arguments we want to display for the client
+    return render_template("player.html", form=form, player_object = blue_player_object, tokens_spent = tokens_spent)
 
     # the trouble above is that if the if-statement never evaluates to true, then the method just prints
     # tokens and renders the template - when it does this the player receives tokens anew! this is a problem
