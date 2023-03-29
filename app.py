@@ -42,27 +42,47 @@ def show_tokens():
     tokens_in_battery = game.total_to_battery
     return render_template("server.html", tokens_in_battery = tokens_in_battery)
 
+# route to start the game
+@app.route("/intro", methods=["GET", "POST"])
+def begin_game():
+    intro = game.intro
+    return render_template("intro.html", intro = intro)
+
+# route to start the game
+@app.route("/outro", methods=["GET", "POST"])
+def end_game():
+    outro = game.outro
+    return render_template("outro.html", outro = outro)
+
+# route to let players wait
+@app.route("/waiting_room", methods=["GET", "POST"])
+def waiting_room():
+    return render_template("waiting_room.html")
+
 # route to show season and get it based on the game objects current_season
 @app.route("/season", methods=["GET", "POST"])
 def show_season():
-    season = game.set_season(game.current_season)
+    season = game.get_season()
     return render_template("season.html", season = season)
 
 # route to show an event and start a round
 @app.route("/event", methods=["GET", "POST"])
 def show_event():
     event = game.start_round(game.current_round)
-    return render_template("event.html", event = event, current_round = game.current_round, season = game.current_season)
+    return render_template("event.html", event = event, current_round = game.current_round, season = season.season_list[game.current_season].name.lower(), tokens = game.codi2.energy_amount)
 
 # route to end a round show energy_decisions 
 @app.route("/energy_decision", methods=["GET", "POST"])
 def show_energy_decision():
     energy_distribution_statement = game.end_round()
-    return render_template("energy_decision.html", energy_distribution_statement = energy_distribution_statement, energy_decision = game.set_current_energy_decision())
+    return render_template("energy_decision.html", energy_distribution_statement = energy_distribution_statement, energy_decision = game.set_current_energy_decision(), round = game.current_round, max_rounds = game.max_rounds, season = game.current_season)
 
 # route to show town hall meeting text
 @app.route("/town_hall_meeting", methods=["GET", "POST"])
 def town_hall_meeting():
+    print(game.current_season)
+    print(game.current_round)
+    # if we are at the final round redirect to the outro
     return render_template("town_hall_meeting.html")
 
 # route to show upgrades and let the players vote
@@ -76,6 +96,7 @@ def upgrades():
         # get value from the chosen radio button
         chosen_upgrade = int(request.form.get("radio_choice") )
         game.apply_upgrade(chosen_upgrade)
+        game.set_season(game.current_season)
         return redirect(url_for("show_season"))
 
 
