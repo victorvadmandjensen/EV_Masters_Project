@@ -10,6 +10,14 @@ Enter your tokens!
 {% block content %}
 	
 
+<h1>You are the <span>{{player_object.role}}</span> player.</h1>
+<h4>You spent {{tokens_spent}} tokens last round.</h4>
+<h4>You received {{player_object.base_tokens}} from the CoDI-2 algorithm this round. </h4>
+<h4>You have {{player_object.tokens}} tokens that you can spend!</h4>
+{{wtf.quick_form(form)}}
+
+
+</script>
 
 
 {% endblock content%}
