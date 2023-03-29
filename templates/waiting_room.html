@@ -15,9 +15,8 @@ Welcome!
 
     <script type="text/javascript">
 
-        var player = "/" + "{{ player_object.role }}";
         	document.getElementById("back").onclick = function () {
-        	location.href = player;
+        	history.back()
     	};
     </script>
 {% endblock %}
