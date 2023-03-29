@@ -1,13 +1,6 @@
 {% extends 'bootstrap/base.html' %}
 {% import "bootstrap/wtf.html" as wtf %} 
 
-{% block styles %}
-{{ super() }}
-	<style>
-		body { background: #e8f1f9; }
-	</style>
-{% endblock %}
-
 {% block title %}
 hello
 {% endblock %}
@@ -15,4 +8,37 @@ hello
 {% block content %}
     <h1> {{ energy_distribution_statement }} </h1>
     <p>{{ energy_decision.flavor_text }}</p>
+
+	<button id="next_event" class="float-left submit-button" >Next round!</button>
+
+	<button id="start_thm" class="float-left submit-button" >It's time for a town hall meeting</button>
+
+	<script type="text/javascript">
+		var round = parseInt("{{ round }}");
+		var max_rounds = parseInt("{{ max_rounds }}");
+		var season = parseInt("{{ season }}");
+
+		document.getElementById("next_event").onclick = function () {
+        	location.href = "/event";
+    	};
+
+		document.getElementById("start_thm").onclick = function () {
+			if (season == 3) {
+				location.href = "/outro";
+			}
+			else {
+				location.href = "/town_hall_meeting";
+			}
+		};
+
+		if(round < max_rounds) {
+			document.getElementById("start_thm").style.display = "none";
+			document.getElementById("next_event").style.display = "";
+		} else {
+			document.getElementById("start_thm").style.display = "";
+			document.getElementById("next_event").style.display = "none";
+		};
+		
+	</script>
+	
 {% endblock %}

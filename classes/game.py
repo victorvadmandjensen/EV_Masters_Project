@@ -12,8 +12,8 @@ class Game:
         self.current_players = player.player_list
         self.total_to_battery = 0
         self.codi2 = codi2.CoDI2()
-        # max_rounds is an attribute that considers the max index of rounds (zero-indexed)
-        self.max_rounds = 2
+        # max_rounds is an attribute that considers the max number of rounds, it is 3 as we increment rounds from 0 to 1 when a season starts
+        self.max_rounds = 3
 
     
     def run_game(self):
@@ -38,23 +38,27 @@ class Game:
 
     # function to choose the season from the season_list based on a given int as index
     def set_season(self, season_counter):
-        season_to_show = season.season_list[season_counter]
+        #season_to_show = season.season_list[season_counter]
         # if season is index 3 AKA winter we just return without incrementing
         if season_counter >= 3:
-            return season_to_show
+            return None
         self.current_season = self.current_season + 1 
-        return season_to_show
-
-        game.set_season(game.current_season)
+        #return season_to_show
+    
+    def get_season(self):
+        season_to_get = season.season_list[self.current_season]
+        return season_to_get
 
     # method to start a round, reset relevant values and return events
     def start_round(self, round_counter):
+        self.increment_round()
         self.total_to_battery = 0
         event_to_show = event.Event.randomize_event(self.event_list, self.current_season)
         self.current_event = event_to_show
         # if round is the third for a season then return the event - remember, we increment the round BEFORE this point
         if self.current_round > self.max_rounds:
-            self.current_round = 0
+            # set round to be 1 so that we can count correctly!
+            self.current_round = 1
             return event_to_show
         return event_to_show
         #self.current_round = round_counter
@@ -62,18 +66,6 @@ class Game:
         #print(self.current_event.getEventText())
         #self.total_to_battery = 0
         #self.player_data_entry()
-    
-    def player_data_entry(self):
-        for player in self.current_players:
-            player.receive_tokens()
-            print("The " + player.role + " player receives: " + str(player.base_tokens) + ". Your total is now: " + str(player.tokens) )
-            tokens_spent_current_player = player.enter_tokens_spent()
-            # print("Your total is now: " + str(player.tokens) )
-            tokens_battery_current_player = player.enter_tokens_battery()
-            self.total_to_battery = self.total_to_battery + tokens_battery_current_player
-            player.update_tokens(tokens_spent_current_player, tokens_battery_current_player)
-            print("Your total is now: " + str(player.tokens) + "\n")
-
 
     # method to increment the round counter - should be used in conjunction with other methods in the actual Flask app
     def increment_round(self):
@@ -92,13 +84,13 @@ class Game:
             self.codi2.sell_energy()
             for player in self.current_players:
                 player.tokens = player.tokens + energy_decision.tokens_consequence
-            self.increment_round()
+            #self.increment_round()
             return energy_decision
         elif self.codi2.energy_amount <= 0:
-            self.increment_round()
+            #self.increment_round()
             return energy_decision
         elif self.codi2.energy_amount >= 0 and self.current_round != 2:
-            self.increment_round()
+            #self.increment_round()
             return None
         
     # method to apply inputted upgrade to attributes    

@@ -1,0 +1,23 @@
+{% extends 'bootstrap/base.html' %}
+{% import "bootstrap/wtf.html" as wtf %} 
+
+
+
+{% block title %}
+Welcome!
+{% endblock %}
+
+{% block content %}
+    <h1> Wait here until it is the next round! </h1>
+
+    <button id="back" class="float-left submit-button">The next round has started</button>
+
+
+    <script type="text/javascript">
+
+        var player = "/" + "{{ player_object.role }}";
+        	document.getElementById("back").onclick = function () {
+        	location.href = player;
+    	};
+    </script>
+{% endblock %}

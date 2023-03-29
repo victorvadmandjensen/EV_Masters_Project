@@ -1,0 +1,21 @@
+{% extends 'bootstrap/base.html' %}
+{% import "bootstrap/wtf.html" as wtf %} 
+
+
+
+{% block title %}
+Welcome!
+{% endblock %}
+
+{% block content %}
+    <h1> Welcome to En-Com! </h1>
+    <p>{{ intro }}</p>
+
+	<button id="begin" class="float-left submit-button" >Go to your first season!</button>
+
+    <script type="text/javascript">
+    	document.getElementById("begin").onclick = function () {
+        location.href = "/season";
+	  };
+    </script>
+{% endblock %}
