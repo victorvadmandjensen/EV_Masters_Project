@@ -23,7 +23,7 @@ Bootstrap(app)
 # just looks for input, while the latter looks for non-zero input
 class NameForm(FlaskForm):
     tokens_action_cards = IntegerField('How many tokens have you spent on action cards and/or player actions?', validators=[NumberRange(min=0,max=20, message=""), InputRequired()])
-    tokens_battery = IntegerField('How many tokens will you send to the battery?', validators=[NumberRange(min=0,max=20, message=""), InputRequired()])
+    tokens_battery = IntegerField('How many tokens will you send to the battery?', validators=[NumberRange(min=-3,max=20, message=""), InputRequired()])
     submit = SubmitField('Submit')
 
     # custom validation method - right now it does not quite work, because it for some reason does not let the player lose tokens
@@ -154,3 +154,58 @@ def blue_player():
     blue_player_object.receive_tokens()
     # render the tame plate with arguments we want to display for the client
     return render_template("player.html", form=form, player_object = blue_player_object)
+
+# route for the green player
+@app.route("/green", methods=["GET", "POST"])
+def green_player():
+    # set up form
+    form = NameForm()
+    # get red player based on index
+    green_player_object = game.current_players[3]
+    # check if the form is valid
+    if form.validate_on_submit():
+        tokens_for_action_cards = form.tokens_action_cards.data
+        tokens_for_battery = form.tokens_battery.data
+        print(f"Player has {green_player_object.tokens} tokens, and the sum is { sum( [tokens_for_action_cards, tokens_for_battery] ) }" )
+        # if the sum of tokens entered is larger than the player's tokens then raise a StopValidation error
+        if sum( [tokens_for_action_cards, tokens_for_battery] ) > green_player_object.tokens:
+            raise StopValidation(message="TURN BACK")
+        # provide game object tokens and update the player object's tokens
+        game.receive_tokens_battery(tokens_for_battery)
+        green_player_object.update_tokens(tokens_for_action_cards, tokens_for_battery)
+        # create a form object with formdata = None to clear the fields
+        form = NameForm(formdata = None)
+        return render_template("waiting_room.html")
+    # run the receive_tokens() method on the player object - we do that here because if it is above the form validation statement
+    # then the player would receive tokens BEFORE the form validation, meaning they would always have 7 more tokens than shown
+    green_player_object.receive_tokens()
+    # render the tame plate with arguments we want to display for the client
+    return render_template("player.html", form=form, player_object = green_player_object)
+
+
+# route for the yellow player
+@app.route("/yellow", methods=["GET", "POST"])
+def yellow_player():
+    # set up form
+    form = NameForm()
+    # get red player based on index
+    yellow_player_object = game.current_players[0]
+    # check if the form is valid
+    if form.validate_on_submit():
+        tokens_for_action_cards = form.tokens_action_cards.data
+        tokens_for_battery = form.tokens_battery.data
+        print(f"Player has {yellow_player_object.tokens} tokens, and the sum is { sum( [tokens_for_action_cards, tokens_for_battery] ) }" )
+        # if the sum of tokens entered is larger than the player's tokens then raise a StopValidation error
+        if sum( [tokens_for_action_cards, tokens_for_battery] ) > yellow_player_object.tokens:
+            raise StopValidation(message="TURN BACK")
+        # provide game object tokens and update the player object's tokens
+        game.receive_tokens_battery(tokens_for_battery)
+        yellow_player_object.update_tokens(tokens_for_action_cards, tokens_for_battery)
+        # create a form object with formdata = None to clear the fields
+        form = NameForm(formdata = None)
+        return render_template("waiting_room.html")
+    # run the receive_tokens() method on the player object - we do that here because if it is above the form validation statement
+    # then the player would receive tokens BEFORE the form validation, meaning they would always have 7 more tokens than shown
+    yellow_player_object.receive_tokens()
+    # render the tame plate with arguments we want to display for the client
+    return render_template("player.html", form=form, player_object = yellow_player_object)
