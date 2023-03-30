@@ -135,8 +135,6 @@ def blue_player():
     form = NameForm()
     # get blue player based on index
     blue_player_object = game.current_players[2]
-    # set tokens_spent to 0 as default
-    tokens_spent = 0
     # check if the form is valid
     if form.validate_on_submit():
         tokens_for_action_cards = form.tokens_action_cards.data
@@ -155,4 +153,4 @@ def blue_player():
     # then the player would receive tokens BEFORE the form validation, meaning they would always have 7 more tokens than shown
     blue_player_object.receive_tokens()
     # render the tame plate with arguments we want to display for the client
-    return render_template("player.html", form=form, player_object = blue_player_object, tokens_spent = tokens_spent)
+    return render_template("player.html", form=form, player_object = blue_player_object)
