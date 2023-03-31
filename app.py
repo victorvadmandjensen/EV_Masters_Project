@@ -79,6 +79,7 @@ def show_event():
 @app.route("/energy_decision", methods=["GET", "POST"])
 def show_energy_decision():
     energy_distribution_statement = game.end_round()
+    # add data to Excel
     data_module.add_energy_sent_to_battery(game.total_to_battery)
     data_module.add_event(game.current_event)
     return render_template("energy_decision.html", energy_distribution_statement = energy_distribution_statement, energy_decision = game.set_current_energy_decision(), round = game.current_round, max_rounds = game.max_rounds, season = game.current_season)
