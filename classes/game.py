@@ -8,7 +8,7 @@ class Game:
         self.current_event = None
         self.event_list = event.event_list
         self.intro = 'Welcome to our energy community! We recently started and have just gotten everything set up. Now, it is your turn to be a part of the community and helps us reach a sustainable future. We have 1 year to prove to those around us that we can thrive as both a community and individuals. \n'
-        self.outro = 'Thank you for working with our energy community! We enjoyed having you all, and hope you can help other energy communities thrive. \n'
+        self.outro = 'It has now been a year and it is time to evaluate how it has been to be a part of the community. Additionally, it is time to see if we have reached the community goal set on the community meter. \n If the goal has been reached, great! We did it! And thus, it is time to figure out who the citizen of the year is. Add the number of action cards you own that match your color and add that to the number of citizen points you have. \n If the goal has not been reached, everyone loses.'
         self.current_players = player.player_list
         self.total_to_battery = 0
         self.codi2 = codi2.CoDI2()
