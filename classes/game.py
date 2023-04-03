@@ -80,7 +80,7 @@ class Game:
     def set_current_energy_decision(self):
         energy_decision = self.codi2.determine_energy_decision()
         # if statement to check if energy should be sold
-        if self.codi2.energy_amount > 0 and self.current_round == 2:
+        if self.codi2.energy_amount > 0 and self.current_round > 2:
             self.codi2.sell_energy()
             for player in self.current_players:
                 player.tokens = player.tokens + energy_decision.tokens_consequence
