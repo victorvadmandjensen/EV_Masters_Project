@@ -49,8 +49,7 @@ def show_tokens():
 # route to start the game
 @app.route("/intro", methods=["GET", "POST"])
 def begin_game():
-    intro = game.intro
-    return render_template("intro.html", intro = intro)
+    return render_template("intro.html")
 
 # route to start the game
 @app.route("/outro", methods=["GET", "POST"])
