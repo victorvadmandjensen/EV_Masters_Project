@@ -13,10 +13,17 @@ Enter your tokens!
 <h1>You are the <span>{{player_object.role}}</span> player.</h1>
 <h4>You received {{player_object.base_tokens}} from the CoDI-2 algorithm this round. </h4>
 <h4>You have {{player_object.tokens}} tokens that you can spend!</h4>
-{{wtf.quick_form(form)}}
+<p>
+    {{wtf.quick_form(form)}}
+</p>
 
-
-</script>
-
+{% if player_object.role != "yellow"%}
+    <script>
+        // script which gets the id of the form for the yellow player's action, and sets it to dispaly nothing if the player is not yellow
+        form_id = "{{form.tokens_yellow_first_action.id}}"
+        document.getElementById(form_id).style.display = "None";
+        
+    </script>
+{% endif %}
 
 {% endblock content%}

@@ -2,7 +2,7 @@ from flask import Flask, render_template, redirect, url_for, request
 from flask_bootstrap import Bootstrap
 from flask_wtf import FlaskForm
 # below we only important strings, integers and submissions from wtforms, and we have to import more options
-from wtforms import StringField, SubmitField, IntegerField, ValidationError
+from wtforms import StringField, SubmitField, IntegerField, ValidationError, BooleanField
 from wtforms.validators import InputRequired, NumberRange, StopValidation
 
 import classes.game as game, classes.codi2 as codi2, classes.energy_decision as energy_decision, classes.event as event, classes.player as player, classes.season as season, time, classes.town_hall_upgrades as town_hall_upgrades, classes.data_collection_module as data_collection_module
@@ -23,16 +23,11 @@ Bootstrap(app)
 # just looks for input, while the latter looks for non-zero input
 class NameForm(FlaskForm):
     tokens_action_cards = IntegerField('How many tokens have you spent on action cards and/or player actions?', validators=[NumberRange(min=0,max=20, message=""), InputRequired()])
-    tokens_battery = IntegerField('How many tokens will you send to the battery?', validators=[NumberRange(min=-3,max=20, message=""), InputRequired()])
-    submit = SubmitField('Submit')
+    tokens_battery = IntegerField('How many tokens will you send to the battery?', validators=[NumberRange(min=0,max=20, message=""), InputRequired()])
+    # field specifically for yellow's player action - it is empty here, but has text in the yellow route
+    tokens_yellow_first_action = BooleanField("")
+    submit = SubmitField('Submit your choices!')
 
-    # custom validation method - right now it does not quite work, because it for some reason does not let the player lose tokens
-    #def check_for_token_validation(form, max_tokens):
-     #   if (int(form.tokens_action_cards.data) + int(form.tokens_battery.data)) > max_tokens:
-            #print(form.tokens_action_cards.data + form.tokens_battery.data)
-      #      raise ValidationError(message="FUCK OFF")
-       # else:
-        #    return True
 
 # initialize game object
 game = game.Game()
@@ -197,12 +192,18 @@ def green_player():
 def yellow_player():
     # set up form
     form = NameForm()
+    form.tokens_yellow_first_action.label.text = "Have you used your player action which requires 3 more energy units?"
     # get red player based on index
     yellow_player_object = game.current_players[0]
     # check if the form is valid
     if form.validate_on_submit():
         tokens_for_action_cards = form.tokens_action_cards.data
         tokens_for_battery = form.tokens_battery.data
+        tokens_for_yellow = form.tokens_yellow_first_action.data
+        # if tokens_for_yellow is true (which it can be as it is a BooleanField) then we minus 3 from the battery,
+        # as the yellow player has used their player action
+        if tokens_for_yellow:
+            tokens_for_battery = tokens_for_battery - 3
         print(f"Player has {yellow_player_object.tokens} tokens, and the sum is { sum( [tokens_for_action_cards, tokens_for_battery] ) }" )
         # if the sum of tokens entered is larger than the player's tokens then raise a StopValidation error
         if sum( [tokens_for_action_cards, tokens_for_battery] ) > yellow_player_object.tokens:
