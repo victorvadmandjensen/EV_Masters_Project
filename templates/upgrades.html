@@ -11,7 +11,7 @@ Town Hall Meeting - Upgrades
     <form action="/upgrades" method="post" id="choose_upgrade">
         {% for upgrade in upgrade_list %}
             <input type="radio" name="radio_choice" value={{upgrade.ID}} id={{upgrade.ID}}>
-            <label for={{upgrade}}>Option {{ upgrade.ID }}:  {{ upgrade.name }}. {{ upgrade.flavor_text }} </label><br><br>
+            <label for={{upgrade}}> {{ upgrade.name }}. {{ upgrade.flavor_text }} </label><br><br>
             <br>
         {% endfor %}
     <input type="submit" value="Choose upgrade!">
