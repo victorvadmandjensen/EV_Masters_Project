@@ -89,8 +89,11 @@ def show_energy_decision():
 def town_hall_meeting():
     print(game.current_season)
     print(game.current_round)
+    # generate list of chosen events and populate it
+    chosen_events = []
+    chosen_events = event.Event.get_events(game.event_list, game.current_season)
     # if we are at the final round redirect to the outro
-    return render_template("town_hall_meeting.html")
+    return render_template("town_hall_meeting.html", chosen_events = chosen_events)
 
 # route to show upgrades and let the players vote
 @app.route("/upgrades", methods=["GET", "POST"])
