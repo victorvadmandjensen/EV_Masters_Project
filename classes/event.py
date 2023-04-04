@@ -29,10 +29,17 @@ class Event:
         event_list[event_index].chosen_this_game = True        
         return event_list[event_index]
     
+    # static method to get list of events that have passed in a season
     @staticmethod
-    def reset_events(event_list):
-        for i in range(0, len(event_list)):
-            event_list[i].chosen_this_game = False
+    # take the game object's event_list and a season index as parameters
+    def get_events(event_list, season):
+        chosen_events = []
+        for event in event_list:
+            if event.chosen_this_game == True and event.season == season:
+                chosen_events.append(event)
+        # return the list of chosen events
+        return chosen_events
+
 
 # event objects are created
 event_blizzard = Event(0, 'Bilzzard in spring!', 'There has been an unexpected blizzard in the energy community! The community now needs 4 more energy units stored in the community battery at the end of this round.', -4, 0)

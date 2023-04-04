@@ -12,9 +12,9 @@ class Player:
         self.tokens = self.tokens + self.base_tokens
 
 # define player objects
-red = Player('red', 7)
-green = Player('green', 8)
-blue = Player('blue', 7)
-yellow = Player('yellow', 8)
+red = Player('red', 5)
+green = Player('green', 6)
+blue = Player('blue', 5)
+yellow = Player('yellow', 6)
 
 player_list = [yellow, red, blue, green]
