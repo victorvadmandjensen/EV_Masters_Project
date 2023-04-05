@@ -1,10 +1,11 @@
 import random
 
 class Event:
-    def __init__(self, id, name, flavor_text, event_effect, season):
+    def __init__(self, id, name, flavor_text, thm_text, event_effect, season):
         self.id = id
         self.name = name
         self.flavor_text = flavor_text
+        self.thm_text = thm_text
         self.event_effect = event_effect
         # season is a number - 0 for spring, 1 for summer, 2 for fall, 3 for winter
         self.season = season
@@ -42,9 +43,9 @@ class Event:
 
 
 # event objects are created
-event_blizzard = Event(0, 'Bilzzard in spring!', 'There has been an unexpected blizzard in the energy community! The community now needs 4 more energy units stored in the community battery at the end of this round.', -4, 0)
-event_allergy = Event(1, 'Allergy in the community!', 'There has been an allergy outbreak in the energy community! The hospital requires 5 more energy units stored in the community battery at the end of this round.', -5, 0)
-event_algorithm = Event(2, 'Sorry!', 'The algorithm has made a mistake! CoDI-2 has sold some energy prematurely, and the community battery requires one more energy stored in the community battery at the end of this round.', -1, 0)
+event_blizzard = Event(0, 'Bilzzard in spring!', 'There has been an unexpected blizzard in the energy community! The community now needs 4 more energy units stored in the community battery at the end of this round.', 'An unexpected blizzard', -4, 0)
+event_allergy = Event(1, 'Allergy in the community!', 'There has been an allergy outbreak in the energy community! The hospital requires 5 more energy units stored in the community battery at the end of this round.', 'Higher energy demands at Lake May Hospital due to an allergy outbreak', -5, 0)
+event_algorithm = Event(2, 'Sorry!', 'The algorithm has made a mistake! CoDI-2 has sold some energy prematurely, and the community battery requires one more energy stored in the community battery at the end of this round.', 'Prematurely sold energy - sorry again!', -1, 0)
 
 event_heatwave = Event(3, 'Heatwave!', 'Summer is hot - much hotter than expected. As a result, a bunch of solar panels in the community have overheated and the community now needs 3 more energy units stored in the community battery at the end of this round to make up for this.', -3, 1)
 event_icecream = Event(4, 'Ice cream fun!', 'It is the perfect weather for ice cream and many in the community has taken to spending time outside. This means that the community battery will need 2 less energy this round.', 2, 1)
