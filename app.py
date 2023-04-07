@@ -129,7 +129,7 @@ def red_player():
     # then the player would receive tokens BEFORE the form validation, meaning they would always have 7 more tokens than shown
     red_player_object.receive_tokens()
     # render the tame plate with arguments we want to display for the client
-    return render_template("player.html", form=form, player_object = red_player_object)
+    return render_template("player.html", form=form, player_object = red_player_object, current_round = game.current_round)
 
 
 # route for the blue player
@@ -157,7 +157,7 @@ def blue_player():
     # then the player would receive tokens BEFORE the form validation, meaning they would always have 7 more tokens than shown
     blue_player_object.receive_tokens()
     # render the tame plate with arguments we want to display for the client
-    return render_template("player.html", form=form, player_object = blue_player_object)
+    return render_template("player.html", form=form, player_object = blue_player_object, current_round = game.current_round)
 
 # route for the green player
 @app.route("/green", methods=["GET", "POST"])
@@ -184,7 +184,7 @@ def green_player():
     # then the player would receive tokens BEFORE the form validation, meaning they would always have 7 more tokens than shown
     green_player_object.receive_tokens()
     # render the tame plate with arguments we want to display for the client
-    return render_template("player.html", form=form, player_object = green_player_object)
+    return render_template("player.html", form=form, player_object = green_player_object, current_round = game.current_round)
 
 
 # route for the yellow player
@@ -218,4 +218,4 @@ def yellow_player():
     # then the player would receive tokens BEFORE the form validation, meaning they would always have 7 more tokens than shown
     yellow_player_object.receive_tokens()
     # render the tame plate with arguments we want to display for the client
-    return render_template("player.html", form=form, player_object = yellow_player_object)
+    return render_template("player.html", form=form, player_object = yellow_player_object, current_round = game.current_round)
