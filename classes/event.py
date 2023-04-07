@@ -2,10 +2,11 @@ import random
 from openpyxl import load_workbook, Workbook
 
 class Event:
-    def __init__(self, id, name, flavor_text, event_effect, season):
+    def __init__(self, id, name, flavor_text, thm_text, event_effect, season):
         self.id = id
         self.name = name
         self.flavor_text = flavor_text
+        self.thm_text = thm_text
         self.event_effect = event_effect
         # season is a number - 0 for spring, 1 for summer, 2 for fall, 3 for winter
         self.season = season
