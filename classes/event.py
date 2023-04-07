@@ -54,9 +54,10 @@ worksheet = workbook.active
 for i in range(1,17):
     new_event = Event( int(worksheet.cell(column=1,row=i+1).value), 
                       str(worksheet.cell(column=2,row=i+1).value), 
-                      str(worksheet.cell(column=3,row=i+1).value), 
-                      int(worksheet.cell(column=4,row=i+1).value), 
-                      int(worksheet.cell(column=5,row=i+1).value)
+                      str(worksheet.cell(column=3,row=i+1).value),
+                      str(worksheet.cell(column=4,row=i+1).value), 
+                      int(worksheet.cell(column=5,row=i+1).value), 
+                      int(worksheet.cell(column=6,row=i+1).value)
                       )
     event_list.append(new_event)
 
