@@ -42,7 +42,7 @@ class Event:
         return chosen_events
 
 
-# event objects are created
+# event objects are created: delete later!
 event_blizzard = Event(0, 'Bilzzard in spring!', 'There has been an unexpected blizzard in the energy community! The community now needs 4 more energy units stored in the community battery at the end of this round.', -4, 0)
 event_allergy = Event(1, 'Allergy in the community!', 'There has been an allergy outbreak in the energy community! The hospital requires 5 more energy units stored in the community battery at the end of this round.', -5, 0)
 event_algorithm = Event(2, 'Sorry!', 'The algorithm has made a mistake! CoDI-2 has sold some energy prematurely, and the community battery requires one more energy stored in the community battery at the end of this round.', -1, 0)
