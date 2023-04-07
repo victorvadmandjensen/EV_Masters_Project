@@ -14,9 +14,12 @@ Welcome!
 
 
     <script type="text/javascript">
-
+        // get the site that referred us to this page
+            lastURL = document.referrer;
+            console.log(lastURL);
+            console.log("hello");
         	document.getElementById("back").onclick = function () {
-        	history.back()
+                location.href=lastURL
     	};
     </script>
 {% endblock %}
