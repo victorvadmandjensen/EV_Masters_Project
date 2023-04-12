@@ -78,6 +78,7 @@ def show_energy_decision():
     data_module.add_event(game.current_event)
     # get energy decision
     energy_decision = game.set_current_energy_decision()
+
     data_module.add_energy_decision(energy_decision)
     return render_template("energy_decision.html", energy_distribution_statement = energy_distribution_statement, energy_decision = energy_decision, round = game.current_round, max_rounds = game.max_rounds, season = game.current_season)
 
@@ -122,6 +123,8 @@ def red_player():
         # if the sum of tokens entered is larger than the player's tokens then raise a StopValidation error
         if sum( [tokens_for_action_cards, tokens_for_battery] ) > red_player_object.tokens:
             raise StopValidation(message="TURN BACK")
+        #enter tokens_for_battery in the data_module
+        data_module.add_player_energy(red_player_object.role, tokens_for_battery)
         # provide game object tokens and update the player object's tokens
         game.receive_tokens_battery(tokens_for_battery)
         red_player_object.update_tokens(tokens_for_action_cards, tokens_for_battery)
@@ -150,6 +153,8 @@ def blue_player():
         # if the sum of tokens entered is larger than the player's tokens then raise a StopValidation error
         if sum( [tokens_for_action_cards, tokens_for_battery] ) > blue_player_object.tokens:
             raise StopValidation(message="TURN BACK")
+        #enter tokens_for_battery in the data_module
+        data_module.add_player_energy(blue_player_object.role, tokens_for_battery)
         # provide game object tokens and update the player object's tokens
         game.receive_tokens_battery(tokens_for_battery)
         blue_player_object.update_tokens(tokens_for_action_cards, tokens_for_battery)
@@ -177,6 +182,8 @@ def green_player():
         # if the sum of tokens entered is larger than the player's tokens then raise a StopValidation error
         if sum( [tokens_for_action_cards, tokens_for_battery] ) > green_player_object.tokens:
             raise StopValidation(message="TURN BACK")
+        #enter tokens_for_battery in the data_module
+        data_module.add_player_energy(green_player_object.role, tokens_for_battery)
         # provide game object tokens and update the player object's tokens
         game.receive_tokens_battery(tokens_for_battery)
         green_player_object.update_tokens(tokens_for_action_cards, tokens_for_battery)
@@ -211,6 +218,8 @@ def yellow_player():
         # if the sum of tokens entered is larger than the player's tokens then raise a StopValidation error
         if sum( [tokens_for_action_cards, tokens_for_battery] ) > yellow_player_object.tokens:
             raise StopValidation(message="TURN BACK")
+        #enter tokens_for_battery in the data_module
+        data_module.add_player_energy(yellow_player_object.role, tokens_for_battery)
         # provide game object tokens and update the player object's tokens
         game.receive_tokens_battery(tokens_for_battery)
         yellow_player_object.update_tokens(tokens_for_action_cards, tokens_for_battery)
