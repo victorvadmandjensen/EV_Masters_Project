@@ -51,5 +51,6 @@ class Data_Collection_Module:
             if self.ws.cell(column=column,row=1).value.lower() == player_role:
                 # remember! here we set the row to counter+1, because we only update the counter after every player has inserted something
                 self.ws.cell(column=column,row=self.counter+1).value = energy_to_battery
+        self.workbook.save(filename = self.filename)
 
 
