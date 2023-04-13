@@ -7,7 +7,11 @@ Energy state
 
 {% block content %}
     <h1> {{ energy_distribution_statement }} </h1>
-    <p>{{ energy_decision.flavor_text }}</p>
+	{% if energy_decision == None %}
+		<p>We will save the excess energy for now.</p>
+    {% else %}
+		<p>{{ energy_decision.flavor_text }}</p>
+	{% endif %}
 
 	<button id="next_event" class="float-left submit-button" >Next round!</button>
 
