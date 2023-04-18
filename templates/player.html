@@ -15,7 +15,9 @@ Enter your tokens!
 <h4>You received {{player_object.base_tokens}} from the CoDI-2 algorithm this round. </h4>
 <h4>You have {{player_object.tokens}} tokens that you can spend!</h4>
 <p>
-    {{wtf.quick_form(form)}}
+    {{ form.tokens_battery(type="range", class="form-range", min="0", max="{{player_object.tokens}}", step="1") }} <br>
+    {{ form.tokens_action_cards(type="range", class="form-range") }}
+    {{ form.submit }}
 </p>
 
 {% if player_object.role != "yellow"%}
