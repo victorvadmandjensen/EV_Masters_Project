@@ -9,14 +9,32 @@ Enter your tokens!
 
 {% block content %}
 	
-
-<h1>You are the <span>{{player_object.role}}</span> player.</h1>
+<div style="margin: auto; width: 50%;">
+<h1><span>{{player_object.role.upper()}}</span></h1>
+</div>
 <h4>It is round {{current_round}}.</h4>
 <h4>You received {{player_object.base_tokens}} from the CoDI-2 algorithm this round. </h4>
 <h4>You have {{player_object.tokens}} tokens that you can spend!</h4>
-<p>
-    {{wtf.quick_form(form)}}
-</p>
+<div style="margin: auto; width: 50%;">
+
+    <form action="{{ url_for(player_object.role + "_player") }}", method="[POST]">
+        {{ form.tokens_action_cards.label("How many tokens have you spent on action cards?")  }}
+        {{ form.tokens_action_cards(class="form-control" ) }}
+
+        {{ form.tokens_player_actions.label("How many tokens have you spent on player actions?")  }}
+        {{ form.tokens_player_actions(class="form-control" ) }}
+
+        {{ form.tokens_battery.label("How many tokens will you send to the community battery?")  }}
+        {{ form.tokens_battery(class="form-control" ) }}
+
+        Have you used your player action which requires 3 more energy units?
+        {{ form.tokens_yellow_first_action(type="checkbox", class="btn-check", autocomplete="off") }}
+        {{ form.tokens_yellow_first_action.label("YES", class="btn btn-outline-primary", for="{{form.tokens_yellow_first_action.id}}") }}
+        <br><br>
+        {{ form.submit(class="btn btn-outline-info", action="submit") }}
+    </form>
+
+</div>
 
 {% if player_object.role != "yellow"%}
     <script>

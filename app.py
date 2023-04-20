@@ -22,7 +22,8 @@ Bootstrap(app)
 # all NumberRange fields have to be minimum zero to be valid - we use InputRequired() (and not DataRequired()), as the former
 # just looks for input, while the latter looks for non-zero input
 class NameForm(FlaskForm):
-    tokens_action_cards = IntegerField('How many tokens have you spent on action cards and/or player actions?', validators=[NumberRange(min=0,max=20, message=""), InputRequired()])
+    tokens_action_cards = IntegerField('How many tokens have you spent on action cards?', validators=[NumberRange(min=0,max=20, message=""), InputRequired()])
+    tokens_player_actions = IntegerField("How many tokens have you spent on player actions?", validators=[NumberRange(min=0,max=20, message=""), InputRequired()])
     tokens_battery = IntegerField('How many tokens will you send to the battery?', validators=[NumberRange(min=0,max=20, message=""), InputRequired()])
     # field specifically for yellow's player action - it is empty here, but has text in the yellow route
     tokens_yellow_first_action = BooleanField("")
@@ -116,17 +117,17 @@ def red_player():
     red_player_object = game.current_players[1]
     # check if the form is valid
     if form.validate_on_submit():
-        tokens_for_action_cards = form.tokens_action_cards.data
+        tokens_for_actions = form.tokens_action_cards.data + form.tokens_player_actions.data
         tokens_for_battery = form.tokens_battery.data
-        print(f"Player has {red_player_object.tokens} tokens, and the sum is { sum( [tokens_for_action_cards, tokens_for_battery] ) }" )
+        print(f"Player has {red_player_object.tokens} tokens, and the sum is { sum( [tokens_for_actions, tokens_for_battery] ) }" )
         # if the sum of tokens entered is larger than the player's tokens then raise a StopValidation error
-        if sum( [tokens_for_action_cards, tokens_for_battery] ) > red_player_object.tokens:
+        if sum( [tokens_for_actions, tokens_for_battery] ) > red_player_object.tokens:
             raise StopValidation(message="TURN BACK")
         #enter tokens_for_battery in the data_module
         data_module.add_player_energy(red_player_object.role, tokens_for_battery)
         # provide game object tokens and update the player object's tokens
         game.receive_tokens_battery(tokens_for_battery)
-        red_player_object.update_tokens(tokens_for_action_cards, tokens_for_battery)
+        red_player_object.update_tokens(tokens_for_actions, tokens_for_battery)
         # create a form object with formdata = None to clear the fields
         form = NameForm(formdata = None)
         return render_template("waiting_room.html")
@@ -146,17 +147,17 @@ def blue_player():
     blue_player_object = game.current_players[2]
     # check if the form is valid
     if form.validate_on_submit():
-        tokens_for_action_cards = form.tokens_action_cards.data
+        tokens_for_actions = form.tokens_action_cards.data + form.tokens_player_actions.data
         tokens_for_battery = form.tokens_battery.data
-        print(f"Player has {blue_player_object.tokens} tokens, and the sum is { sum( [tokens_for_action_cards, tokens_for_battery] ) }" )
+        print(f"Player has {blue_player_object.tokens} tokens, and the sum is { sum( [tokens_for_actions, tokens_for_battery] ) }" )
         # if the sum of tokens entered is larger than the player's tokens then raise a StopValidation error
-        if sum( [tokens_for_action_cards, tokens_for_battery] ) > blue_player_object.tokens:
+        if sum( [tokens_for_actions, tokens_for_battery] ) > blue_player_object.tokens:
             raise StopValidation(message="TURN BACK")
         #enter tokens_for_battery in the data_module
         data_module.add_player_energy(blue_player_object.role, tokens_for_battery)
         # provide game object tokens and update the player object's tokens
         game.receive_tokens_battery(tokens_for_battery)
-        blue_player_object.update_tokens(tokens_for_action_cards, tokens_for_battery)
+        blue_player_object.update_tokens(tokens_for_actions, tokens_for_battery)
         # create a form object with formdata = None to clear the fields
         form = NameForm(formdata = None)
         return render_template("waiting_room.html")
@@ -175,17 +176,17 @@ def green_player():
     green_player_object = game.current_players[3]
     # check if the form is valid
     if form.validate_on_submit():
-        tokens_for_action_cards = form.tokens_action_cards.data
+        tokens_for_actions = form.tokens_action_cards.data + form.tokens_player_actions.data
         tokens_for_battery = form.tokens_battery.data
-        print(f"Player has {green_player_object.tokens} tokens, and the sum is { sum( [tokens_for_action_cards, tokens_for_battery] ) }" )
+        print(f"Player has {green_player_object.tokens} tokens, and the sum is { sum( [tokens_for_actions, tokens_for_battery] ) }" )
         # if the sum of tokens entered is larger than the player's tokens then raise a StopValidation error
-        if sum( [tokens_for_action_cards, tokens_for_battery] ) > green_player_object.tokens:
+        if sum( [tokens_for_actions, tokens_for_battery] ) > green_player_object.tokens:
             raise StopValidation(message="TURN BACK")
         #enter tokens_for_battery in the data_module
         data_module.add_player_energy(green_player_object.role, tokens_for_battery)
         # provide game object tokens and update the player object's tokens
         game.receive_tokens_battery(tokens_for_battery)
-        green_player_object.update_tokens(tokens_for_action_cards, tokens_for_battery)
+        green_player_object.update_tokens(tokens_for_actions, tokens_for_battery)
         # create a form object with formdata = None to clear the fields
         form = NameForm(formdata = None)
         return render_template("waiting_room.html")
@@ -201,27 +202,27 @@ def green_player():
 def yellow_player():
     # set up form
     form = NameForm()
-    form.tokens_yellow_first_action.label.text = "Have you used your player action which requires 3 more energy units?"
+    # form.tokens_yellow_first_action.label.text = "Have you used your player action which requires 3 more energy units?"
     # get red player based on index
     yellow_player_object = game.current_players[0]
     # check if the form is valid
     if form.validate_on_submit():
-        tokens_for_action_cards = form.tokens_action_cards.data
+        tokens_for_actions = form.tokens_action_cards.data + form.tokens_player_actions.data
         tokens_for_battery = form.tokens_battery.data
         tokens_for_yellow = form.tokens_yellow_first_action.data
         # if tokens_for_yellow is true (which it can be as it is a BooleanField) then we minus 3 from the battery,
         # as the yellow player has used their player action
         if tokens_for_yellow:
             tokens_for_battery = tokens_for_battery - 3
-        print(f"Player has {yellow_player_object.tokens} tokens, and the sum is { sum( [tokens_for_action_cards, tokens_for_battery] ) }" )
+        print(f"Player has {yellow_player_object.tokens} tokens, and the sum is { sum( [tokens_for_actions, tokens_for_battery] ) }" )
         # if the sum of tokens entered is larger than the player's tokens then raise a StopValidation error
-        if sum( [tokens_for_action_cards, tokens_for_battery] ) > yellow_player_object.tokens:
+        if sum( [tokens_for_actions, tokens_for_battery] ) > yellow_player_object.tokens:
             raise StopValidation(message="TURN BACK")
         #enter tokens_for_battery in the data_module
         data_module.add_player_energy(yellow_player_object.role, tokens_for_battery)
         # provide game object tokens and update the player object's tokens
         game.receive_tokens_battery(tokens_for_battery)
-        yellow_player_object.update_tokens(tokens_for_action_cards, tokens_for_battery)
+        yellow_player_object.update_tokens(tokens_for_actions, tokens_for_battery)
         # create a form object with formdata = None to clear the fields
         form = NameForm(formdata = None)
         return render_template("waiting_room.html")
