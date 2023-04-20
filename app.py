@@ -26,7 +26,7 @@ class NameForm(FlaskForm):
     tokens_player_actions = IntegerField("How many tokens have you spent on player actions?", validators=[NumberRange(min=0,max=20, message=""), InputRequired()])
     tokens_battery = IntegerField('How many tokens will you send to the battery?', validators=[NumberRange(min=0,max=20, message=""), InputRequired()])
     # field specifically for yellow's player action - it is empty here, but has text in the yellow route
-    tokens_yellow_first_action = BooleanField("")
+    tokens_yellow_first_action = BooleanField("", render_kw={"class": "btn btn-primary btn-block"})
     submit = SubmitField('Submit your choices!')
 
 
@@ -202,7 +202,7 @@ def green_player():
 def yellow_player():
     # set up form
     form = NameForm()
-    # form.tokens_yellow_first_action.label.text = "Have you used your player action which requires 3 more energy units?"
+    form.tokens_yellow_first_action.label.text = "Have you used your player action which requires 3 more energy units?"
     # get red player based on index
     yellow_player_object = game.current_players[0]
     # check if the form is valid
