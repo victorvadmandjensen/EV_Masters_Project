@@ -25,7 +25,8 @@ Enter your tokens!
         {{ form.tokens_battery.label(form.tokens_battery.label.text) }}
         {{ form.tokens_battery(class="form-control") }}
 
-        {{form.tokens_yellow_first_action.label("Have you used your player action which requires 3 more energy units?")}}
+        {{form.tokens_yellow_first_action.label("Have you used your player action which requires 3 more energy units?", id__ ="yellow_label")}}
+        <br>
         {{form.tokens_yellow_first_action(class="") }}
         <br>
         {{ form.submit(class="btn btn-outline-info") }}
@@ -37,9 +38,8 @@ Enter your tokens!
     <script>
         // script which gets the id of the form for the yellow player's action, and sets it to dispaly nothing if the player is not yellow
         form_id = "{{form.tokens_yellow_first_action.id}}"
-        label_id = "{{form.tokens_yellow_first_action.label.id}}"
         document.getElementById(form_id).style.display = "None";
-        document.getElementById(label_id).style.display = "None";
+        document.getElementById("yellow_label").hidden = "hidden";
         
     </script>
 {% endif %}
