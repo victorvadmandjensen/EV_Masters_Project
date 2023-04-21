@@ -18,21 +18,81 @@ Enter your tokens!
 <div class="form-control " style="margin: auto; width: 50%; background-color: transparent; border-style: hidden;">
 
     <form action="{{ url_for(player_object.role+"_player") }}" method="post">
-        {{ form.tokens_action_cards.label(form.tokens_action_cards.label.text) }}
-        {{ form.tokens_action_cards(class="form-control") }}
-        {{ form.tokens_player_actions.label(form.tokens_player_actions.label.text) }}
-        {{ form.tokens_player_actions(class="form-control") }}
-        {{ form.tokens_battery.label(form.tokens_battery.label.text) }}
-        {{ form.tokens_battery(class="form-control") }}
 
-        {{form.tokens_yellow_first_action.label("Have you used your player action which requires 3 more energy units?", id__ ="yellow_label")}}
+        {{ form.tokens_action_cards.label(form.tokens_action_cards.label.text) }} <br>
+        <div class="btn-group" role="group">
+            <button type="button" class="btn btn-danger" id="action_cards_minus">-</button>
+            {{ form.tokens_action_cards(class="form-control") }}
+            <button type="button" class="btn btn-success" id="action_cards_plus">+</button>
+        </div>
+
+        {{ form.tokens_player_actions.label(form.tokens_player_actions.label.text) }} <br>
+        <div class="btn-group" role="group">
+            <button type="button" class="btn btn-danger" id="player_actions_minus">-</button>
+            {{ form.tokens_player_actions(class="form-control") }}
+            <button type="button" class="btn btn-success" id="player_actions_plus">+</button>
+        </div>
         <br>
-        {{form.tokens_yellow_first_action(class="") }}
+        {{ form.tokens_battery.label(form.tokens_battery.label.text) }} <br>
+        <div class="btn-group" role="group">
+            <button type="button" class="btn btn-danger" id="battery_minus">-</button>
+            {{ form.tokens_battery(class="form-control") }}
+            <button type="button" class="btn btn-success" id="battery_plus">+</button>
+        </div>
+
+        <div id="yellow_action">
+        Have you used your player action which requires 3 more energy units?
+        <div class="btn-group">
+        {% for subfield in form.tokens_yellow_first_action %}
+        <tr>
+            <td>{{ subfield(class="btn-check", autocomplete="off") }}</td>
+            <td>{{ subfield.label(class="btn btn-outline-secondary")}} </td>
+        </tr>
+        {% endfor %}
+        </div>
+        </div>
         <br>
         {{ form.submit(class="btn btn-outline-info") }}
     </form>
 
 </div>
+
+    <script>
+        // functions to minus and plus using buttons
+        // remember that the value that should be inserted into the field should first be a typecast version of what is in the field to do math operations
+        document.getElementById("action_cards_minus").onclick = function () {
+            document.getElementById("{{form.tokens_action_cards.id}}").value = Number(document.getElementById("{{form.tokens_action_cards.id}}").value) - 1
+        };
+
+        document.getElementById("action_cards_plus").onclick = function () {
+            document.getElementById("{{form.tokens_action_cards.id}}").value = Number(document.getElementById("{{form.tokens_action_cards.id}}").value) + 1
+        };
+    </script>
+
+<script>
+    // functions to minus and plus using buttons
+    // remember that the value that should be inserted into the field should first be a typecast version of what is in the field to do math operations
+    document.getElementById("player_actions_minus").onclick = function () {
+        document.getElementById("{{form.tokens_player_actions.id}}").value = Number(document.getElementById("{{form.tokens_player_actions.id}}").value) - 1
+    };
+
+    document.getElementById("player_actions_plus").onclick = function () {
+        document.getElementById("{{form.tokens_player_actions.id}}").value = Number(document.getElementById("{{form.tokens_player_actions.id}}").value) + 1
+    };
+</script>
+
+<script>
+    // functions to minus and plus using buttons
+    // remember that the value that should be inserted into the field should first be a typecast version of what is in the field to do math operations
+    document.getElementById("battery_minus").onclick = function () {
+        document.getElementById("{{form.tokens_battery.id}}").value = Number(document.getElementById("{{form.tokens_battery.id}}").value) - 1
+    };
+
+    document.getElementById("battery_plus").onclick = function () {
+        document.getElementById("{{form.tokens_battery.id}}").value = Number(document.getElementById("{{form.tokens_battery.id}}").value) + 1
+    };
+</script>
+
 
 {% if player_object.role != "yellow"%}
     <script>
