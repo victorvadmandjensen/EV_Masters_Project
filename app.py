@@ -146,7 +146,8 @@ def blue_player():
     # get blue player based on index
     blue_player_object = game.current_players[2]
     # check if the form is valid
-    if form.validate_on_submit():
+    #if form.validate_on_submit() and request.method == "POST":
+    if request.method == "POST":
         tokens_for_actions = form.tokens_action_cards.data + form.tokens_player_actions.data
         tokens_for_battery = form.tokens_battery.data
         print(f"Player has {blue_player_object.tokens} tokens, and the sum is { sum( [tokens_for_actions, tokens_for_battery] ) }" )
@@ -161,11 +162,12 @@ def blue_player():
         # create a form object with formdata = None to clear the fields
         form = NameForm(formdata = None)
         return render_template("waiting_room.html")
-    # run the receive_tokens() method on the player object - we do that here because if it is above the form validation statement
-    # then the player would receive tokens BEFORE the form validation, meaning they would always have 7 more tokens than shown
-    blue_player_object.receive_tokens()
-    # render the tame plate with arguments we want to display for the client
-    return render_template("player.html", form=form, player_object = blue_player_object, current_round = game.current_round)
+    else:
+        # run the receive_tokens() method on the player object - we do that here because if it is above the form validation statement
+        # then the player would receive tokens BEFORE the form validation, meaning they would always have 7 more tokens than shown
+        blue_player_object.receive_tokens()
+        # render the tame plate with arguments we want to display for the client
+        return render_template("player.html", form=form, player_object = blue_player_object, current_round = game.current_round)
 
 # route for the green player
 @app.route("/green", methods=["GET", "POST"])
@@ -202,11 +204,11 @@ def green_player():
 def yellow_player():
     # set up form
     form = NameForm()
-    form.tokens_yellow_first_action.label.text = "Have you used your player action which requires 3 more energy units?"
+    #form.tokens_yellow_first_action.label.text = "Have you used your player action which requires 3 more energy units?"
     # get red player based on index
     yellow_player_object = game.current_players[0]
     # check if the form is valid
-    if form.validate_on_submit():
+    if request.method == "POST":
         tokens_for_actions = form.tokens_action_cards.data + form.tokens_player_actions.data
         tokens_for_battery = form.tokens_battery.data
         tokens_for_yellow = form.tokens_yellow_first_action.data
@@ -226,8 +228,9 @@ def yellow_player():
         # create a form object with formdata = None to clear the fields
         form = NameForm(formdata = None)
         return render_template("waiting_room.html")
-    # run the receive_tokens() method on the player object - we do that here because if it is above the form validation statement
-    # then the player would receive tokens BEFORE the form validation, meaning they would always have 7 more tokens than shown
-    yellow_player_object.receive_tokens()
-    # render the tame plate with arguments we want to display for the client
-    return render_template("player.html", form=form, player_object = yellow_player_object, current_round = game.current_round)
+    else:   
+        # run the receive_tokens() method on the player object - we do that here because if it is above the form validation statement
+        # then the player would receive tokens BEFORE the form validation, meaning they would always have 7 more tokens than shown
+        yellow_player_object.receive_tokens()
+        # render the tame plate with arguments we want to display for the client
+        return render_template("player.html", form=form, player_object = yellow_player_object, current_round = game.current_round)
