@@ -42,15 +42,21 @@ Enter your tokens!
 
         <div id="yellow_action">
         Have you used your player action which requires 3 more energy units?
-        <div class="btn-group">
-        {% for subfield in form.tokens_yellow_first_action %}
-        <tr>
-            <td>{{ subfield(class="btn-check", autocomplete="off") }}</td>
-            <td>{{ subfield.label(class="btn btn-outline-secondary")}} </td>
-        </tr>
-        {% endfor %}
+        <br>
+        <br>
+            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+            {% for subfield in form.tokens_yellow_first_action %}
+
+            <tr>
+                <label class="btn btn-outline-secondary">
+                <td>{{ subfield(class="btn-check", autocomplete="off", type="radio") }}</td>
+                <td>{{ subfield.label(class="b")}} </td>
+                </label>
+            </tr>
+            {% endfor %}
+            </div>
         </div>
-        </div>
+        <br>
         <br>
         {{ form.submit(class="btn btn-outline-info") }}
     </form>
@@ -99,7 +105,7 @@ Enter your tokens!
         // script which gets the id of the form for the yellow player's action, and sets it to dispaly nothing if the player is not yellow
         form_id = "{{form.tokens_yellow_first_action.id}}"
         document.getElementById(form_id).style.display = "None";
-        document.getElementById("yellow_label").hidden = "hidden";
+        document.getElementById("yellow_label").style.display = "None";
         
     </script>
 {% endif %}

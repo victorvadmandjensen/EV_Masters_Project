@@ -26,7 +26,7 @@ class NameForm(FlaskForm):
     tokens_player_actions = IntegerField("How many tokens have you spent on player actions?", validators=[NumberRange(min=0,max=20, message=""), InputRequired()], default="0")
     tokens_battery = IntegerField('How many tokens will you send to the battery?', validators=[NumberRange(min=0,max=20, message=""), InputRequired()], default="0")
     # field specifically for yellow's player action - it is empty here, but has text in the yellow route
-    tokens_yellow_first_action = RadioField("", choices=[("True", "YES"), ("False", "NO")], default="False")
+    tokens_yellow_first_action = RadioField("", choices=[("True", "YES"), ("False", "NO")], name="yellow_action",validators=[InputRequired()])
     submit = SubmitField('Submit your choices!')
 
 
