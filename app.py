@@ -2,7 +2,7 @@ from flask import Flask, render_template, redirect, url_for, request
 from flask_bootstrap import Bootstrap
 from flask_wtf import FlaskForm
 # below we only important strings, integers and submissions from wtforms, and we have to import more options
-from wtforms import StringField, SubmitField, IntegerField, ValidationError, BooleanField
+from wtforms import StringField, SubmitField, IntegerField, ValidationError, BooleanField, RadioField
 from wtforms.validators import InputRequired, NumberRange, StopValidation
 
 import classes.game as game, classes.codi2 as codi2, classes.energy_decision as energy_decision, classes.event as event, classes.player as player, classes.season as season, time, classes.town_hall_upgrades as town_hall_upgrades, classes.data_collection_module as data_collection_module
@@ -22,10 +22,11 @@ Bootstrap(app)
 # all NumberRange fields have to be minimum zero to be valid - we use InputRequired() (and not DataRequired()), as the former
 # just looks for input, while the latter looks for non-zero input
 class NameForm(FlaskForm):
-    tokens_action_cards = IntegerField('How many tokens have you spent on action cards and/or player actions?', validators=[NumberRange(min=0,max=20, message=""), InputRequired()])
-    tokens_battery = IntegerField('How many tokens will you send to the battery?', validators=[NumberRange(min=0,max=20, message=""), InputRequired()])
+    tokens_action_cards = IntegerField('How many tokens have you spent on action cards?', validators=[NumberRange(min=0,max=20, message=""), InputRequired()], default="0")
+    tokens_player_actions = IntegerField("How many tokens have you spent on player actions?", validators=[NumberRange(min=0,max=20, message=""), InputRequired()], default="0")
+    tokens_battery = IntegerField('How many tokens will you send to the battery?', validators=[NumberRange(min=0,max=20, message=""), InputRequired()], default="0")
     # field specifically for yellow's player action - it is empty here, but has text in the yellow route
-    tokens_yellow_first_action = BooleanField("")
+    tokens_yellow_first_action = RadioField("", choices=[("True", "YES"), ("False", "NO")], name="yellow_action",validators=[InputRequired()])
     submit = SubmitField('Submit your choices!')
 
 
@@ -115,26 +116,27 @@ def red_player():
     # get red player based on index
     red_player_object = game.current_players[1]
     # check if the form is valid
-    if form.validate_on_submit():
-        tokens_for_action_cards = form.tokens_action_cards.data
+    if request.method == "POST":
+        tokens_for_actions = form.tokens_action_cards.data + form.tokens_player_actions.data
         tokens_for_battery = form.tokens_battery.data
-        print(f"Player has {red_player_object.tokens} tokens, and the sum is { sum( [tokens_for_action_cards, tokens_for_battery] ) }" )
+        print(f"Player has {red_player_object.tokens} tokens, and the sum is { sum( [tokens_for_actions, tokens_for_battery] ) }" )
         # if the sum of tokens entered is larger than the player's tokens then raise a StopValidation error
-        if sum( [tokens_for_action_cards, tokens_for_battery] ) > red_player_object.tokens:
+        if sum( [tokens_for_actions, tokens_for_battery] ) > red_player_object.tokens:
             raise StopValidation(message="TURN BACK")
         #enter tokens_for_battery in the data_module
         data_module.add_player_energy(red_player_object.role, tokens_for_battery)
         # provide game object tokens and update the player object's tokens
         game.receive_tokens_battery(tokens_for_battery)
-        red_player_object.update_tokens(tokens_for_action_cards, tokens_for_battery)
+        red_player_object.update_tokens(tokens_for_actions, tokens_for_battery)
         # create a form object with formdata = None to clear the fields
         form = NameForm(formdata = None)
         return render_template("waiting_room.html")
-    # run the receive_tokens() method on the player object - we do that here because if it is above the form validation statement
-    # then the player would receive tokens BEFORE the form validation, meaning they would always have 7 more tokens than shown
-    red_player_object.receive_tokens()
-    # render the tame plate with arguments we want to display for the client
-    return render_template("player.html", form=form, player_object = red_player_object, current_round = game.current_round)
+    else:
+        # run the receive_tokens() method on the player object - we do that here because if it is above the form validation statement
+        # then the player would receive tokens BEFORE the form validation, meaning they would always have 7 more tokens than shown
+        red_player_object.receive_tokens()
+        # render the tame plate with arguments we want to display for the client
+        return render_template("player.html", form=form, player_object = red_player_object, current_round = game.current_round)
 
 
 # route for the blue player
@@ -145,26 +147,28 @@ def blue_player():
     # get blue player based on index
     blue_player_object = game.current_players[2]
     # check if the form is valid
-    if form.validate_on_submit():
-        tokens_for_action_cards = form.tokens_action_cards.data
+    #if form.validate_on_submit() and request.method == "POST":
+    if request.method == "POST":
+        tokens_for_actions = form.tokens_action_cards.data + form.tokens_player_actions.data
         tokens_for_battery = form.tokens_battery.data
-        print(f"Player has {blue_player_object.tokens} tokens, and the sum is { sum( [tokens_for_action_cards, tokens_for_battery] ) }" )
+        print(f"Player has {blue_player_object.tokens} tokens, and the sum is { sum( [tokens_for_actions, tokens_for_battery] ) }" )
         # if the sum of tokens entered is larger than the player's tokens then raise a StopValidation error
-        if sum( [tokens_for_action_cards, tokens_for_battery] ) > blue_player_object.tokens:
+        if sum( [tokens_for_actions, tokens_for_battery] ) > blue_player_object.tokens:
             raise StopValidation(message="TURN BACK")
         #enter tokens_for_battery in the data_module
         data_module.add_player_energy(blue_player_object.role, tokens_for_battery)
         # provide game object tokens and update the player object's tokens
         game.receive_tokens_battery(tokens_for_battery)
-        blue_player_object.update_tokens(tokens_for_action_cards, tokens_for_battery)
+        blue_player_object.update_tokens(tokens_for_actions, tokens_for_battery)
         # create a form object with formdata = None to clear the fields
         form = NameForm(formdata = None)
         return render_template("waiting_room.html")
-    # run the receive_tokens() method on the player object - we do that here because if it is above the form validation statement
-    # then the player would receive tokens BEFORE the form validation, meaning they would always have 7 more tokens than shown
-    blue_player_object.receive_tokens()
-    # render the tame plate with arguments we want to display for the client
-    return render_template("player.html", form=form, player_object = blue_player_object, current_round = game.current_round)
+    else:
+        # run the receive_tokens() method on the player object - we do that here because if it is above the form validation statement
+        # then the player would receive tokens BEFORE the form validation, meaning they would always have 7 more tokens than shown
+        blue_player_object.receive_tokens()
+        # render the tame plate with arguments we want to display for the client
+        return render_template("player.html", form=form, player_object = blue_player_object, current_round = game.current_round)
 
 # route for the green player
 @app.route("/green", methods=["GET", "POST"])
@@ -174,26 +178,27 @@ def green_player():
     # get red player based on index
     green_player_object = game.current_players[3]
     # check if the form is valid
-    if form.validate_on_submit():
-        tokens_for_action_cards = form.tokens_action_cards.data
+    if request.method == "POST":
+        tokens_for_actions = form.tokens_action_cards.data + form.tokens_player_actions.data
         tokens_for_battery = form.tokens_battery.data
-        print(f"Player has {green_player_object.tokens} tokens, and the sum is { sum( [tokens_for_action_cards, tokens_for_battery] ) }" )
+        print(f"Player has {green_player_object.tokens} tokens, and the sum is { sum( [tokens_for_actions, tokens_for_battery] ) }" )
         # if the sum of tokens entered is larger than the player's tokens then raise a StopValidation error
-        if sum( [tokens_for_action_cards, tokens_for_battery] ) > green_player_object.tokens:
+        if sum( [tokens_for_actions, tokens_for_battery] ) > green_player_object.tokens:
             raise StopValidation(message="TURN BACK")
         #enter tokens_for_battery in the data_module
         data_module.add_player_energy(green_player_object.role, tokens_for_battery)
         # provide game object tokens and update the player object's tokens
         game.receive_tokens_battery(tokens_for_battery)
-        green_player_object.update_tokens(tokens_for_action_cards, tokens_for_battery)
+        green_player_object.update_tokens(tokens_for_actions, tokens_for_battery)
         # create a form object with formdata = None to clear the fields
         form = NameForm(formdata = None)
         return render_template("waiting_room.html")
-    # run the receive_tokens() method on the player object - we do that here because if it is above the form validation statement
-    # then the player would receive tokens BEFORE the form validation, meaning they would always have 7 more tokens than shown
-    green_player_object.receive_tokens()
-    # render the tame plate with arguments we want to display for the client
-    return render_template("player.html", form=form, player_object = green_player_object, current_round = game.current_round)
+    else:
+        # run the receive_tokens() method on the player object - we do that here because if it is above the form validation statement
+        # then the player would receive tokens BEFORE the form validation, meaning they would always have 7 more tokens than shown
+        green_player_object.receive_tokens()
+        # render the tame plate with arguments we want to display for the client
+        return render_template("player.html", form=form, player_object = green_player_object, current_round = game.current_round)
 
 
 # route for the yellow player
@@ -201,32 +206,33 @@ def green_player():
 def yellow_player():
     # set up form
     form = NameForm()
-    form.tokens_yellow_first_action.label.text = "Have you used your player action which requires 3 more energy units?"
+    #form.tokens_yellow_first_action.label.text = "Have you used your player action which requires 3 more energy units?"
     # get red player based on index
     yellow_player_object = game.current_players[0]
     # check if the form is valid
-    if form.validate_on_submit():
-        tokens_for_action_cards = form.tokens_action_cards.data
+    if request.method == "POST":
+        tokens_for_actions = form.tokens_action_cards.data + form.tokens_player_actions.data
         tokens_for_battery = form.tokens_battery.data
         tokens_for_yellow = form.tokens_yellow_first_action.data
         # if tokens_for_yellow is true (which it can be as it is a BooleanField) then we minus 3 from the battery,
         # as the yellow player has used their player action
-        if tokens_for_yellow:
+        if tokens_for_yellow == "True":
             tokens_for_battery = tokens_for_battery - 3
-        print(f"Player has {yellow_player_object.tokens} tokens, and the sum is { sum( [tokens_for_action_cards, tokens_for_battery] ) }" )
+        print(f"Player has {yellow_player_object.tokens} tokens, and the sum is { sum( [tokens_for_actions, tokens_for_battery] ) }" )
         # if the sum of tokens entered is larger than the player's tokens then raise a StopValidation error
-        if sum( [tokens_for_action_cards, tokens_for_battery] ) > yellow_player_object.tokens:
+        if sum( [tokens_for_actions, tokens_for_battery] ) > yellow_player_object.tokens:
             raise StopValidation(message="TURN BACK")
         #enter tokens_for_battery in the data_module
         data_module.add_player_energy(yellow_player_object.role, tokens_for_battery)
         # provide game object tokens and update the player object's tokens
         game.receive_tokens_battery(tokens_for_battery)
-        yellow_player_object.update_tokens(tokens_for_action_cards, tokens_for_battery)
+        yellow_player_object.update_tokens(tokens_for_actions, tokens_for_battery)
         # create a form object with formdata = None to clear the fields
         form = NameForm(formdata = None)
         return render_template("waiting_room.html")
-    # run the receive_tokens() method on the player object - we do that here because if it is above the form validation statement
-    # then the player would receive tokens BEFORE the form validation, meaning they would always have 7 more tokens than shown
-    yellow_player_object.receive_tokens()
-    # render the tame plate with arguments we want to display for the client
-    return render_template("player.html", form=form, player_object = yellow_player_object, current_round = game.current_round)
+    else:   
+        # run the receive_tokens() method on the player object - we do that here because if it is above the form validation statement
+        # then the player would receive tokens BEFORE the form validation, meaning they would always have 7 more tokens than shown
+        yellow_player_object.receive_tokens()
+        # render the tame plate with arguments we want to display for the client
+        return render_template("player.html", form=form, player_object = yellow_player_object, current_round = game.current_round)

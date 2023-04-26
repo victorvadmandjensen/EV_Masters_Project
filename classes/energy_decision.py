@@ -17,6 +17,6 @@ equilibrium = Energy_Decision(0, 0, 'This is an equilibirum! Everything is as it
 # deficit
 mild_deficit = Energy_Decision(-3, -1, 'This is a mild deficit! In order to make up for this, we implement a curfew to restrict energy use in Energy City until the situation has stabilized. You lose 1 morale point on the community meter.\n', 0)
 moderate_deficit = Energy_Decision(-8, -4, 'This is a moderate deficit! We are able to make up for this by shutting off lights in all private households from 8pm to 5am, and by buying some energy from nearby energy communities. You lose the following points on the community meter: 1 environmental, 1 morale, and 1 economic. \n', 0)
-severe_deficit = Energy_Decision(-100, -9, 'This is a servere deficit! In order to have enough energy for everyone in the community, I had to buy energy from the national grid. As a result, you lose the following points on the community meter: 2 environmental, 2 social, and 2 economic. You can only use either a action card or a player action in the next round. \n', 0)
+severe_deficit = Energy_Decision(-100, -9, 'This is a servere deficit! In order to have enough energy for everyone in the community, I had to buy energy from the national grid. As a result, you lose the following points on the community meter: 2 environmental, 2 social, and 2 economic. You can only use either an action card or a player action in the next round. \n', 0)
 
 energy_decision_list = [severe_excess, moderate_excess, mild_excess, equilibrium, mild_deficit, moderate_deficit, severe_deficit]
