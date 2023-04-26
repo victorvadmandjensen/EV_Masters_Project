@@ -2,13 +2,12 @@
 {% import "bootstrap/wtf.html" as wtf %} 
 
 
-
 {% block title %}
 Enter your tokens!
 {% endblock %}
 
 {% block content %}
-	
+
 <div style="margin: auto; width: 50%;">
 <h1><span style="">{{player_object.role.upper()}}</span></h1>
 </div>
@@ -109,5 +108,9 @@ Enter your tokens!
         
     </script>
 {% endif %}
+
+<script>
+    document.body.style.backgroundColor = "{{player_object.bg_color}}";
+</script>
 
 {% endblock content%}
