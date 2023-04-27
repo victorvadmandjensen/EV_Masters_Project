@@ -6,12 +6,14 @@ Welcome!
 {% endblock %}
 
 {% block content %}
+
+<body style="background-color:#AEAEAE;"></body>
+
     <h1>THE<br>WAITING<br>ROOM</h1>
     <blockquote>Press the button below when it is your turn again. Do not proceed before, as you may not receive all your tokens.</blockquote>
 
-    <center>
+    <center> <button type="button" class="btn btn-info" id="back" class="float-left btn  btn-outline-info">The next round has started</button> </center>
 
-    <button type="button" class="btn btn-info" id="back" class="float-left btn  btn-outline-info">The next round has started</button> </center>
 
     <script type="text/javascript">
         // get the site that referred us to this page
@@ -22,4 +24,5 @@ Welcome!
                 location.href=lastURL
     	};
     </script>
+
 {% endblock %}
