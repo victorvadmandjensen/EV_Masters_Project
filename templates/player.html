@@ -8,8 +8,10 @@ Enter your tokens!
 
 {% block content %}
 
+<body style="background-color:#EAEAEA;"></body>
+
 <div style="margin: auto; width: 50%;">
-<h1 id="player_title"><span style="">{{player_object.role.upper()}}</span></h1>
+<h1 id="player_title">{{player_object.role.upper()}}</h1>
 </div>
 <h4>It is round {{current_round}}.</h4>
 <h4>You received {{player_object.base_tokens}} from the CoDI-2 algorithm this round. </h4>
@@ -59,8 +61,9 @@ Enter your tokens!
         <br>
         {{ form.submit(class="btn btn-outline-info") }}
     </form>
-
 </div>
+
+</body>
 
     <script>
         // functions to minus and plus using buttons
