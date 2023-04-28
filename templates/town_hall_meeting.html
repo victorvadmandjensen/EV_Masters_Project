@@ -7,7 +7,6 @@ Town Hall Meeting
 {% endblock %}
 
 {% block content %}
-	<body style="background-color:#AEAEAE;">
     <h1> Welcome to a town hall meeting! </h1>
     <p>Welcome to our quarterly town hall meeting!
 	We use these meetings as opportunities to figure out if Energy City is on the right track.
@@ -31,9 +30,7 @@ Town Hall Meeting
 	</p>
 
 	<button id="start_vote" style="float: right" class="float-right btn btn-info submit-button">Proceed to community upgrade</button>
-	
-	</body>
-	
+
 	<script type="text/javascript">
 	document.getElementById("start_vote").onclick = function () {
 		location.href = "/upgrades";

@@ -6,19 +6,17 @@
 {% endblock %}
 
 {% block content %}
-    <body style="background-color:#AEAEAE;">
     <h2> This is round {{ current_round }} in {{ season }} </h2>
     <h1> {{ event.name }} </h1>
     <p>{{ event.flavor_text }}</p>
     <h2>There are {{tokens}} tokens in the battery!</h2>
 
-    <center><button id="end_round" class="float-right btn btn-info submit-button">Click when everyone has taken their turn</button></center>
+    <button id="end_round" class="float-right btn btn-info submit-button">Click when everyone has taken their turn</button>
 
     <script type="text/javascript">
     document.getElementById("end_round").onclick = function () {
         location.href = "/energy_decision";
         };
     </script>
-    </body>
 
 {% endblock %}
