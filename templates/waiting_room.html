@@ -1,16 +1,18 @@
 {% extends 'bootstrap/base.html' %}
 {% import "bootstrap/wtf.html" as wtf %} 
 
-
-
 {% block title %}
 Welcome!
 {% endblock %}
 
 {% block content %}
-    <h1> Wait here until it is the next round! </h1>
 
-    <button id="back" class="float-left btn  btn-outline-info">The next round has started</button>
+<body style="background-color:#AEAEAE;"></body>
+
+    <h1>THE<br>WAITING<br>ROOM</h1>
+    <blockquote>Press the button below when it is your turn again. Do not proceed before, as you may not receive all your tokens.</blockquote>
+
+    <center> <button type="button" class="btn btn-info" id="back" class="btn-outline-info">The next round has started</button> </center>
 
 
     <script type="text/javascript">
@@ -22,4 +24,5 @@ Welcome!
                 location.href=lastURL
     	};
     </script>
+
 {% endblock %}
