@@ -219,7 +219,7 @@ def yellow_player():
         if sum( [tokens_for_action_cards, tokens_for_battery] ) > yellow_player_object.tokens:
             raise StopValidation(message="TURN BACK")
         #enter tokens_for_battery in the data_module
-        data_module.add_player_energy(yellow_player_object.role, tokens_for_battery)
+        data_module.add_player_energy(yellow_player_object.role, -abs(tokens_for_battery))
         # provide game object tokens and update the player object's tokens, and make it negative
         game.receive_tokens_battery( -abs(tokens_for_battery) )
         yellow_player_object.update_tokens(tokens_for_action_cards, tokens_for_battery)

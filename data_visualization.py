@@ -4,7 +4,9 @@ import matplotlib.ticker as ticker
 # import seaborn as sns
 
 df = pd.read_excel("energy_per_round.xlsx")
+print(df)
 
+# REMEBEMBER that you need more than one round to see the stacked chart!
 plt.stackplot(df["Round"], df["Red"],df["Blue"],df["Yellow"],df["Green"], labels=["Red", "Blue", "Yellow", "Green"], colors=["#DE7162", "#A7E8F1", "#F0E963", "#2F8E4B"])
 plt.xlabel("Round")
 plt.ylabel("Energy sent to the community battery by players")
