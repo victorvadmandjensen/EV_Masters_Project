@@ -213,15 +213,15 @@ def yellow_player():
         # if tokens_for_yellow is true (which it can be as it is a BooleanField) then we minus 3 from the battery,
         # as the yellow player has used their player action
         if tokens_for_yellow:
-            tokens_for_battery = tokens_for_battery + 3
+            tokens_for_battery = tokens_for_battery - 3
         print(f"Player has {yellow_player_object.tokens} tokens, and the sum is { sum( [tokens_for_action_cards, tokens_for_battery] ) }" )
         # if the sum of tokens entered is larger than the player's tokens then raise a StopValidation error
         if sum( [tokens_for_action_cards, tokens_for_battery] ) > yellow_player_object.tokens:
             raise StopValidation(message="TURN BACK")
         #enter tokens_for_battery in the data_module
-        data_module.add_player_energy(yellow_player_object.role, -abs(tokens_for_battery))
+        data_module.add_player_energy(yellow_player_object.role, abs(tokens_for_battery))
         # provide game object tokens and update the player object's tokens, and make it negative
-        game.receive_tokens_battery( -abs(tokens_for_battery) )
+        game.receive_tokens_battery( abs(tokens_for_battery) )
         yellow_player_object.update_tokens(tokens_for_action_cards, tokens_for_battery)
         # create a form object with formdata = None to clear the fields
         form = NameForm(formdata = None)
