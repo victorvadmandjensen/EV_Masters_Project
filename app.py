@@ -210,19 +210,23 @@ def yellow_player():
         tokens_for_action_cards = form.tokens_action_cards.data + form.tokens_player_actions.data
         tokens_for_battery = form.tokens_battery.data
         tokens_for_yellow = form.tokens_yellow_first_action.data
+        # variable to keep track of whether to minus 3 based on the checked box 
+        token_tracker = 0  
         # if tokens_for_yellow is true (which it can be as it is a BooleanField) then we minus 3 from the battery,
         # as the yellow player has used their player action
         if tokens_for_yellow:
-            tokens_for_battery = tokens_for_battery - 3
+            # commented out the calculation and just change token_tracker and use this
+            # tokens_for_battery = tokens_for_battery - 3
+            token_tracker = 3
         print(f"Player has {yellow_player_object.tokens} tokens, and the sum is { sum( [tokens_for_action_cards, tokens_for_battery] ) }" )
         # if the sum of tokens entered is larger than the player's tokens then raise a StopValidation error
         if sum( [tokens_for_action_cards, tokens_for_battery] ) > yellow_player_object.tokens:
             raise StopValidation(message="TURN BACK")
         #enter tokens_for_battery in the data_module
-        data_module.add_player_energy(yellow_player_object.role, abs(tokens_for_battery))
+        data_module.add_player_energy(yellow_player_object.role, tokens_for_battery - token_tracker) # minus
         # provide game object tokens and update the player object's tokens, and make it negative
-        game.receive_tokens_battery( abs(tokens_for_battery) )
-        yellow_player_object.update_tokens(tokens_for_action_cards, tokens_for_battery)
+        game.receive_tokens_battery( tokens_for_battery - token_tracker) # minus
+        yellow_player_object.update_tokens(tokens_for_action_cards, tokens_for_battery + token_tracker) # plus
         # create a form object with formdata = None to clear the fields
         form = NameForm(formdata = None)
         return render_template("waiting_room.html")
